@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SimonApp1.Views.WelcomePage"
+    BackgroundColor="#0a0a0f">
+
+    <Grid RowDefinitions="*,Auto" Padding="20">
+        <VerticalStackLayout VerticalOptions="Center" Spacing="25">
+            <Label Text="Welcome to" 
+                   FontSize="26" 
+                   HorizontalOptions="Center" 
+                   TextColor="#00FFFF"/>
+
+            <Label Text="SIMON SAYS" 
+                   FontSize="42" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="#FF00FF" />
+
+            <Label Text="Test your memory and reflexes!" 
+                   FontSize="18" 
+                   HorizontalOptions="Center" 
+                   TextColor="White" 
+                   Opacity="0.8"/>
+
+            <VerticalStackLayout Spacing="15" Margin="0,20,0,0">
+                <Button Text="Start Game" 
+                        Clicked="OnStartGameClicked" 
+                        BackgroundColor="#00FFFF" 
+                        TextColor="Black" 
+                        CornerRadius="20" 
+                        HeightRequest="50"/>
+
+                <Button Text="High Scores" 
+                        Clicked="OnScoresClicked" 
+                        BackgroundColor="#FF00FF" 
+                        TextColor="White" 
+                        CornerRadius="20" 
+                        HeightRequest="50"/>
+
+                <Button Text="Settings" 
+                        Clicked="OnSettingsClicked" 
+                        BackgroundColor="#222" 
+                        TextColor="White" 
+                        CornerRadius="20" 
+                        HeightRequest="50"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <Label Grid.Row="1" 
+               Text="© 2025 SimonApp" 
+               HorizontalOptions="Center" 
+               VerticalOptions="End" 
+               TextColor="#444"/>
+    </Grid>
+</ContentPage>

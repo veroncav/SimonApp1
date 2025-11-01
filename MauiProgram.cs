@@ -1,29 +1,34 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
+using SimonApp1.Database;
+using SimonApp1.Services;
+using SimonApp1.Views;
 
+namespace SimonApp1;
 
-namespace SimonApp1
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-            builder.Services.AddSingleton<SimonApp1.Services.ThemeService>();
-            builder.Services.AddSingleton<SimonApp1.Services.SettingsService>();
+        // 1. Регистрируем сервисы
+        builder.Services.AddSingleton<SettingsService>();
+        builder.Services.AddSingleton<ThemeService>();
 
-#endif
+        // 2. Регистрируем базу данных
+        builder.Services.AddSingleton<AppDatabase>();
 
-            return builder.Build();
-        }
+        // 3. Регистрируем страницы
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<SettingsPage>();
+
+        return builder.Build();
     }
-} 
+}

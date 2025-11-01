@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using SimonApp1.Database;
 using SimonApp1.Models;
 using SimonApp1.Services;
@@ -19,11 +18,6 @@ public partial class MainPage : ContentPage
     private Random rnd = new();
     private int score = 0;
 
-    public Color GreenColor => Color.FromArgb("#2ecc71");
-    public Color RedColor => Color.FromArgb("#e74c3c");
-    public Color YellowColor => Color.FromArgb("#f1c40f");
-    public Color BlueColor => Color.FromArgb("#3498db");
-
     public MainPage(SettingsService settings, ThemeService themeService, AppDatabase db)
     {
         InitializeComponent();
@@ -31,25 +25,30 @@ public partial class MainPage : ContentPage
         this.themeService = themeService;
         this.db = db;
 
-        colorButtons = new List<Button> { GreenButton, RedButton, YellowButton, BlueButton };
-
+        colorButtons = new List<Button> { GreenButton, RedButton, BlueButton, YellowButton };
         NameEntry.Text = settings.PlayerName;
-        BindingContext = this;
+        UpdateScoreLabel();
     }
 
-    private async void OnSettingsClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new SettingsPage(settings, themeService));
-    }
+    private void UpdateScoreLabel() => ScoreLabel.Text = score.ToString();
 
     private async void OnStartClicked(object sender, EventArgs e)
     {
-        settings.PlayerName = NameEntry.Text?.Trim() ?? "Player";
+        var playerName = NameEntry.Text?.Trim();
+        if (string.IsNullOrWhiteSpace(playerName))
+        {
+            await DisplayAlert("Ошибка", "Введите имя игрока", "OK");
+            return;
+        }
+
+        settings.PlayerName = playerName;
         sequence.Clear();
         userInput.Clear();
         score = 0;
         isUserTurn = false;
         StartButton.IsEnabled = false;
+
+        UpdateScoreLabel();
         await Task.Delay(300);
         await NextRoundAsync();
     }
@@ -62,7 +61,7 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        sequence.Add(rnd.Next(0, colorButtons.Count));
+        sequence.Add(rnd.Next(colorButtons.Count));
         await PlaySequenceAsync();
         isUserTurn = true;
         userInput.Clear();
@@ -73,23 +72,19 @@ public partial class MainPage : ContentPage
         isUserTurn = false;
         foreach (var idx in sequence)
         {
-            await HighlightButtonAsync(colorButtons[idx]);
-            await Task.Delay(300);
+            await HighlightButton(colorButtons[idx]);
+            await Task.Delay(250);
         }
     }
 
-    private async Task HighlightButtonAsync(Button btn)
+    private async Task HighlightButton(Button btn)
     {
-        var prev = btn.BackgroundColor;
-        await btn.ScaleTo(1.08, 110);
+        var original = btn.BackgroundColor;
+        await btn.ScaleTo(1.15, 120);
         btn.BackgroundColor = Colors.White;
-        if (settings.SoundOn)
-        {
-            try { await Helpers.AudioHelper.PlaySoundAsync("good.wav"); } catch { }
-        }
-        await Task.Delay(220);
-        btn.BackgroundColor = prev;
-        await btn.ScaleTo(1, 120);
+        await Task.Delay(200);
+        btn.BackgroundColor = original;
+        await btn.ScaleTo(1.0, 120);
     }
 
     private async void OnColorClicked(object sender, EventArgs e)
@@ -99,11 +94,10 @@ public partial class MainPage : ContentPage
         var btn = (Button)sender;
         int idx = colorButtons.IndexOf(btn);
 
-        await HighlightButtonAsync(btn);
+        await HighlightButton(btn);
         userInput.Add(idx);
 
-        int i = userInput.Count - 1;
-        if (userInput[i] != sequence[i])
+        if (userInput[^1] != sequence[userInput.Count - 1])
         {
             await ShowResultAsync(false);
             return;
@@ -112,6 +106,7 @@ public partial class MainPage : ContentPage
         if (userInput.Count == sequence.Count)
         {
             score = sequence.Count;
+            UpdateScoreLabel();
             isUserTurn = false;
             await Task.Delay(400);
             await NextRoundAsync();
@@ -122,8 +117,8 @@ public partial class MainPage : ContentPage
     {
         isUserTurn = false;
         Overlay.IsVisible = true;
-        ResultTitle.Text = won ? "Победа!" : "Игра окончена";
-        ResultText.Text = won ? $"Вы прошли все уровни! Очки: {score}" : $"Ошибка! Очки: {score}";
+        ResultTitle.Text = won ? "Победа!" : "Ошибка!";
+        ResultText.Text = $"Очки: {score}";
         StartButton.IsEnabled = true;
     }
 
@@ -133,19 +128,24 @@ public partial class MainPage : ContentPage
         sequence.Clear();
         userInput.Clear();
         score = 0;
-        await Task.Delay(200);
+        UpdateScoreLabel();
+        await Task.Delay(100);
     }
 
     private async void OnSaveScoreClicked(object sender, EventArgs e)
     {
         Overlay.IsVisible = false;
-        var rec = new ScoreRecord
+        await db.SaveScoreAsync(new ScoreRecord
         {
             PlayerName = settings.PlayerName,
             Score = score,
             Date = DateTime.Now
-        };
-        await db.SaveScoreAsync(rec);
-        await DisplayAlert("Сохранено", "Рекорд сохранён", "OK");
+        });
+        await DisplayAlert("Сохранено", "Рекорд записан!", "OK");
+    }
+
+    private async void OnSettingsClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new SettingsPage(settings, themeService));
     }
 }

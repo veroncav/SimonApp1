@@ -18,7 +18,9 @@ namespace SimonApp1.Views
             MaxSlider.Value = settings.MaxRounds;
             MaxLabel.Text = settings.MaxRounds.ToString();
             SoundSwitch.IsToggled = settings.SoundOn;
-            ThemePicker.SelectedItem = themeService.GetTheme();
+
+            // Выбираем текущую тему
+            ThemePicker.SelectedItem = themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
 
             MaxSlider.ValueChanged += (s, e) => MaxLabel.Text = ((int)e.NewValue).ToString();
         }
@@ -28,7 +30,13 @@ namespace SimonApp1.Views
             settings.PlayerName = NameEntry.Text?.Trim() ?? "Player";
             settings.MaxRounds = (int)Math.Round(MaxSlider.Value);
             settings.SoundOn = SoundSwitch.IsToggled;
-            themeService.SetTheme(ThemePicker.SelectedItem?.ToString() ?? "Light");
+
+            // Устанавливаем тему
+            var selectedTheme = ThemePicker.SelectedItem?.ToString() ?? "Light";
+            if (selectedTheme == "Dark")
+                themeService.SetTheme(AppTheme.Dark);
+            else
+                themeService.SetTheme(AppTheme.Light);
 
             DisplayAlert("Сохранено", "Настройки сохранены", "ОК");
         }
