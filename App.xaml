@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SimonApp1"
+             x:Class="SimonApp1.App">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Подключаем стандартные стили -->
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 🎨 Цветовые темы -->
+            <Color x:Key="PrimaryLight">#4CAF50</Color>
+            <Color x:Key="PrimaryDark">#1E88E5</Color>
+            <Color x:Key="BackgroundLight">#FFFFFF</Color>
+            <Color x:Key="BackgroundDark">#121212</Color>
+            <Color x:Key="TextLight">#000000</Color>
+            <Color x:Key="TextDark">#FFFFFF</Color>
+
+            <!-- 🌟 Общий стиль кнопок -->
+            <Style TargetType="Button">
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="WidthRequest" Value="140" />
+                <Setter Property="HeightRequest" Value="140" />
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="Black" Opacity="0.5" Radius="10" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 🏷️ Стиль заголовков -->
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="36" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="TextColor" 
+                        Value="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

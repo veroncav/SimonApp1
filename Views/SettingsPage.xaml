@@ -1,0 +1,30 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SimonApp1.Views.SettingsPage"
+             Title="Настройки">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="18">
+            <Label Text="Имя игрока" FontAttributes="Bold"/>
+            <Entry x:Name="NameEntry" Placeholder="Введите имя" />
+
+            <Label Text="Макс. длина последовательности" FontAttributes="Bold"/>
+            <Slider x:Name="MaxSlider" Minimum="5" Maximum="30" Value="10" />
+            <Label x:Name="MaxLabel" Text="10" HorizontalOptions="End"/>
+
+            <Label Text="Тема" FontAttributes="Bold"/>
+            <Picker x:Name="ThemePicker" Title="Выберите тему">
+                <Picker.Items>
+                    <x:String>Light</x:String>
+                    <x:String>Dark</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="10">
+                <Label Text="Звук" VerticalOptions="Center"/>
+                <Switch x:Name="SoundSwitch"/>
+            </StackLayout>
+
+            <Button Text="Сохранить" Clicked="OnSaveClicked"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
