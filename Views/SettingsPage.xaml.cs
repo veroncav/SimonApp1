@@ -1,44 +1,50 @@
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 using SimonApp1.Services;
 
-namespace SimonApp1.Views
+namespace SimonApp1.Views;
+
+public partial class SettingsPage : ContentPage
 {
-    public partial class SettingsPage : ContentPage
+    private readonly SettingsService _settings;
+    private readonly ThemeService _themeService;
+
+    public SettingsPage(SettingsService settings, ThemeService themeService)
     {
-        private readonly SettingsService settings;
-        private readonly ThemeService themeService;
+        InitializeComponent();
+        _settings = settings;
+        _themeService = themeService;
 
-        public SettingsPage(SettingsService settings, ThemeService themeService)
+        // Инициализация текущих значений на странице
+        SoundSwitch.IsToggled = _settings.SoundOn;
+        ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
+        LanguagePicker.SelectedItem = Preferences.Get("app_language", "Eesti");
+    }
+
+    private void OnSoundToggled(object sender, ToggledEventArgs e)
+    {
+        _settings.SoundOn = e.Value;
+    }
+
+    private void OnThemeChanged(object sender, EventArgs e)
+    {
+        if (ThemePicker.SelectedItem is string theme)
         {
-            InitializeComponent();
-            this.settings = settings;
-            this.themeService = themeService;
-
-            NameEntry.Text = settings.PlayerName;
-            MaxSlider.Value = settings.MaxRounds;
-            MaxLabel.Text = settings.MaxRounds.ToString();
-            SoundSwitch.IsToggled = settings.SoundOn;
-
-            // Выбираем текущую тему
-            ThemePicker.SelectedItem = themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
-
-            MaxSlider.ValueChanged += (s, e) => MaxLabel.Text = ((int)e.NewValue).ToString();
+            AppTheme appTheme = theme == "Dark" ? AppTheme.Dark : AppTheme.Light;
+            _themeService.SetTheme(appTheme);
         }
+    }
 
-        private void OnSaveClicked(object sender, EventArgs e)
+    private void OnLanguageChanged(object sender, EventArgs e)
+    {
+        if (LanguagePicker.SelectedItem is string lang)
         {
-            settings.PlayerName = NameEntry.Text?.Trim() ?? "Player";
-            settings.MaxRounds = (int)Math.Round(MaxSlider.Value);
-            settings.SoundOn = SoundSwitch.IsToggled;
-
-            // Устанавливаем тему
-            var selectedTheme = ThemePicker.SelectedItem?.ToString() ?? "Light";
-            if (selectedTheme == "Dark")
-                themeService.SetTheme(AppTheme.Dark);
-            else
-                themeService.SetTheme(AppTheme.Light);
-
-            DisplayAlert("Сохранено", "Настройки сохранены", "ОК");
+            Preferences.Set("app_language", lang);
         }
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }
