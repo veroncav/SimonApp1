@@ -16,6 +16,7 @@ namespace SimonApp1.Views
             _themeService = themeService;
             _lang = lang;
 
+            // Initialize UI
             SoundSwitch.IsToggled = _settings.SoundOn;
             ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
 
@@ -34,34 +35,38 @@ namespace SimonApp1.Views
             LabelTheme.Text = _lang.T("theme");
             LabelSound.Text = _lang.T("sound");
             LabelLanguage.Text = _lang.T("language");
-            ButtonBack.Text = _lang.T("back");
             LabelMaxRounds.Text = _lang.T("max_rounds");
+            ButtonBack.Text = _lang.T("back");
         }
 
-        private void OnSoundToggled(object sender, ToggledEventArgs e) =>
+        private void OnSoundToggled(object sender, ToggledEventArgs e)
+        {
             _settings.SoundOn = e.Value;
+        }
 
         private void OnThemeChanged(object sender, EventArgs e)
         {
-            if (ThemePicker.SelectedItem is string theme)
-                _themeService.SetTheme(theme == "Dark" ? AppTheme.Dark : AppTheme.Light);
-        }
-
-        private void OnMaxRoundsChanged(object sender, ValueChangedEventArgs e)
-        {
-            _settings.MaxRounds = (int)e.NewValue;
-            MaxRoundsValue.Text = _settings.MaxRounds.ToString();
+            if (ThemePicker.SelectedItem is not string theme) return;
+            _themeService.SetTheme(theme == "Dark" ? AppTheme.Dark : AppTheme.Light);
         }
 
         private void OnLanguageChanged(object sender, EventArgs e)
         {
-            if (LanguagePicker.SelectedItem is string lang)
-                _lang.CurrentLanguage = lang;
-
+            if (LanguagePicker.SelectedItem is not string lang) return;
+            _lang.CurrentLanguage = lang;
             ApplyLanguage();
         }
 
-        private async void OnBackClicked(object sender, EventArgs e) =>
+        private void OnMaxRoundsChanged(object sender, ValueChangedEventArgs e)
+        {
+            int value = (int)e.NewValue;
+            _settings.MaxRounds = value;
+            MaxRoundsValue.Text = value.ToString();
+        }
+
+        private async void OnBackClicked(object sender, EventArgs e)
+        {
             await Navigation.PopAsync();
+        }
     }
 }

@@ -19,7 +19,9 @@
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelTheme" VerticalOptions="Center" />
-                    <Picker x:Name="ThemePicker" WidthRequest="150" SelectedIndexChanged="OnThemeChanged">
+                    <Picker x:Name="ThemePicker"
+                            WidthRequest="150"
+                            SelectedIndexChanged="OnThemeChanged">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Light</x:String>
@@ -38,7 +40,7 @@
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelSound" VerticalOptions="Center" />
-                    <Switch x:Name="SoundSwitch" Toggled="OnSoundToggled" />
+                    <Switch x:Name="SoundSwitch" Toggled="OnSoundToggled"/>
                 </HorizontalStackLayout>
             </Border>
 
@@ -48,11 +50,18 @@
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
 
-                <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
-                    <Label x:Name="LabelMaxRounds" VerticalOptions="Center" />
-                    <Slider x:Name="MaxRoundsSlider" Minimum="5" Maximum="30" ValueChanged="OnMaxRoundsChanged"/>
-                    <Label x:Name="MaxRoundsValue" VerticalOptions="Center"/>
-                </HorizontalStackLayout>
+                <VerticalStackLayout Spacing="10">
+                    <Label x:Name="LabelMaxRounds" />
+                    <Grid ColumnDefinitions="*,auto">
+                        <Slider x:Name="MaxRoundsSlider"
+                                Minimum="5"
+                                Maximum="30"
+                                ValueChanged="OnMaxRoundsChanged"/>
+                        <Label x:Name="MaxRoundsValue"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
             </Border>
 
             <!-- Language -->
@@ -62,12 +71,13 @@
                 </Border.StrokeShape>
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
-                    <Label x:Name="LabelLanguage" VerticalOptions="Center" />
-                    <Picker x:Name="LanguagePicker" WidthRequest="150" SelectedIndexChanged="OnLanguageChanged"/>
+                    <Label x:Name="LabelLanguage" VerticalOptions="Center"/>
+                    <Picker x:Name="LanguagePicker"
+                            WidthRequest="150"
+                            SelectedIndexChanged="OnLanguageChanged"/>
                 </HorizontalStackLayout>
             </Border>
 
-            <!-- Back Button -->
             <Button x:Name="ButtonBack"
                     Clicked="OnBackClicked"
                     BackgroundColor="#0078D7"

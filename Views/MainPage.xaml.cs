@@ -35,7 +35,7 @@ public partial class MainPage : ContentPage
 
     private void ApplyLanguage()
     {
-        StartButton.Text = lang.T("start"); // ✅ Убрали TitleLabel
+        StartButton.Text = lang.T("start");
     }
 
     private void OnConfirmNameClicked(object sender, EventArgs e)
@@ -70,11 +70,19 @@ public partial class MainPage : ContentPage
         userInput.Clear();
         UpdateScore();
 
+        await Task.Delay(250);
         await NextRoundAsync();
     }
 
     private async Task NextRoundAsync()
     {
+        // ✅ Окончание игры при достижении лимита
+        if (sequence.Count == settings.MaxRounds)
+        {
+            await GameOver(win: true);
+            return;
+        }
+
         sequence.Add(rnd.Next(4));
         await PlaySequenceAsync();
         userInput.Clear();
@@ -102,27 +110,40 @@ public partial class MainPage : ContentPage
         await Blink(btn);
         userInput.Add(index);
 
+        // ❌ Ошибка игрока
         if (userInput[^1] != sequence[userInput.Count - 1])
         {
-            await GameOver();
+            await GameOver(win: false);
             return;
         }
 
+        // ✅ Игрок повторил всё → следующий раунд
         if (userInput.Count == sequence.Count)
         {
             score = sequence.Count;
             UpdateScore();
             isUserTurn = false;
+            await Task.Delay(400);
             await NextRoundAsync();
         }
     }
 
-    private async Task GameOver()
+    private async Task GameOver(bool win)
     {
         DisableColorButtons();
         isUserTurn = false;
         StartButton.IsEnabled = true;
 
-        await DisplayAlert(lang.T("lose"), $"{lang.T("score")}: {score}", "OK");
+        await db.SaveScoreAsync(new ScoreRecord
+        {
+            PlayerName = settings.PlayerName,
+            Score = score,
+            Date = DateTime.Now
+        });
+
+        string title = win ? "🎉 Победа!" : lang.T("lose");
+        string msg = $"{lang.T("score")}: {score}";
+
+        await DisplayAlert(title, msg, "OK");
     }
 }
