@@ -19,9 +19,7 @@
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelTheme" VerticalOptions="Center" />
-                    <Picker x:Name="ThemePicker"
-                            WidthRequest="150"
-                            SelectedIndexChanged="OnThemeChanged">
+                    <Picker x:Name="ThemePicker" WidthRequest="150" SelectedIndexChanged="OnThemeChanged">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Light</x:String>
@@ -44,6 +42,19 @@
                 </HorizontalStackLayout>
             </Border>
 
+            <!-- Max rounds -->
+            <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+
+                <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                    <Label x:Name="LabelMaxRounds" VerticalOptions="Center" />
+                    <Slider x:Name="MaxRoundsSlider" Minimum="5" Maximum="30" ValueChanged="OnMaxRoundsChanged"/>
+                    <Label x:Name="MaxRoundsValue" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+
             <!-- Language -->
             <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
                 <Border.StrokeShape>
@@ -52,9 +63,7 @@
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelLanguage" VerticalOptions="Center" />
-                    <Picker x:Name="LanguagePicker"
-                            WidthRequest="150"
-                            SelectedIndexChanged="OnLanguageChanged" />
+                    <Picker x:Name="LanguagePicker" WidthRequest="150" SelectedIndexChanged="OnLanguageChanged"/>
                 </HorizontalStackLayout>
             </Border>
 

@@ -36,7 +36,7 @@ public partial class MainPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        ApplyLanguage(); // 🔄 обновляем язык при возврате со страницы настроек
+        ApplyLanguage();
     }
 
     private void ApplyLanguage()
@@ -59,6 +59,8 @@ public partial class MainPage : ContentPage
         }
 
         settings.PlayerName = playerName;
+        NameEntry.IsEnabled = false; // ⛔ Блокируем изменение имени
+
         sequence.Clear();
         userInput.Clear();
         score = 0;
@@ -145,6 +147,9 @@ public partial class MainPage : ContentPage
         sequence.Clear();
         userInput.Clear();
         score = 0;
+
+        NameEntry.IsEnabled = true; // ✅ Теперь имя можно снова редактировать
+
         UpdateScoreLabel();
         await Task.Delay(100);
     }

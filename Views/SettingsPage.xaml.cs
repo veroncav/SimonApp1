@@ -22,6 +22,9 @@ namespace SimonApp1.Views
             LanguagePicker.ItemsSource = new List<string> { "ru", "en", "et" };
             LanguagePicker.SelectedItem = _lang.CurrentLanguage;
 
+            MaxRoundsSlider.Value = _settings.MaxRounds;
+            MaxRoundsValue.Text = _settings.MaxRounds.ToString();
+
             ApplyLanguage();
         }
 
@@ -32,15 +35,7 @@ namespace SimonApp1.Views
             LabelSound.Text = _lang.T("sound");
             LabelLanguage.Text = _lang.T("language");
             ButtonBack.Text = _lang.T("back");
-        }
-
-        private void OnLanguageChanged(object sender, EventArgs e)
-        {
-            if (LanguagePicker.SelectedItem is string lang)
-            {
-                _lang.CurrentLanguage = lang;
-                ApplyLanguage(); // 🔄 сразу обновить UI
-            }
+            LabelMaxRounds.Text = _lang.T("max_rounds");
         }
 
         private void OnSoundToggled(object sender, ToggledEventArgs e) =>
@@ -52,9 +47,21 @@ namespace SimonApp1.Views
                 _themeService.SetTheme(theme == "Dark" ? AppTheme.Dark : AppTheme.Light);
         }
 
-        private async void OnBackClicked(object sender, EventArgs e)
+        private void OnMaxRoundsChanged(object sender, ValueChangedEventArgs e)
         {
-            await Navigation.PopAsync();
+            _settings.MaxRounds = (int)e.NewValue;
+            MaxRoundsValue.Text = _settings.MaxRounds.ToString();
         }
+
+        private void OnLanguageChanged(object sender, EventArgs e)
+        {
+            if (LanguagePicker.SelectedItem is string lang)
+                _lang.CurrentLanguage = lang;
+
+            ApplyLanguage();
+        }
+
+        private async void OnBackClicked(object sender, EventArgs e) =>
+            await Navigation.PopAsync();
     }
 }
