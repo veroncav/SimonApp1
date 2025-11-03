@@ -25,7 +25,7 @@ namespace SimonApp1.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ApplyLanguage(); // 🔄 обновляем язык при возврате
+            ApplyLanguage();
         }
 
         private void ApplyLanguage()
@@ -37,13 +37,20 @@ namespace SimonApp1.Views
 
         private async void OnStartGameClicked(object sender, EventArgs e)
         {
+            // 🔥 СПРАШИВАЕМ ИМЯ ЗДЕСЬ, ПЕРЕД ИГРОЙ
             if (string.IsNullOrWhiteSpace(_settings.PlayerName))
             {
-                await DisplayAlert(_lang.T("warning"), _lang.T("enter_name"), "OK");
-                return;
+                var name = await DisplayPromptAsync(_lang.T("enter_name"), "", "OK", "Cancel", placeholder: "Player");
+
+                if (string.IsNullOrWhiteSpace(name))
+                    return; // не ввёл → не запускаем игру
+
+                _settings.PlayerName = name.Trim();
             }
 
-            await Navigation.PushAsync(App.Current.Handler.MauiContext.Services.GetService<MainPage>());
+            await Navigation.PushAsync(
+                App.Current.Handler.MauiContext.Services.GetService<MainPage>()
+            );
         }
 
         private async void OnScoresClicked(object sender, EventArgs e)
@@ -53,7 +60,9 @@ namespace SimonApp1.Views
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(App.Current.Handler.MauiContext.Services.GetService<SettingsPage>());
+            await Navigation.PushAsync(
+                App.Current.Handler.MauiContext.Services.GetService<SettingsPage>()
+            );
         }
     }
 }

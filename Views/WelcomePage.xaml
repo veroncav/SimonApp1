@@ -1,30 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimonApp1.Views.WelcomePage"
              BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
 
-    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+    <VerticalStackLayout Padding="40" Spacing="32" VerticalOptions="Center">
 
-        <!-- Заголовок тоже переведём -->
-        <Label x:Name="TitleLabel"
-               FontSize="32"
+        <!-- Название игры -->
+        <Label Text="SIMON SAYS"
+               FontSize="48"
                FontAttributes="Bold"
-               HorizontalOptions="Center" />
+               HorizontalOptions="Center"
+               TextColor="{AppThemeBinding Light=#0077FF, Dark=#66B3FF}" />
 
+        <!-- Кнопки -->
         <Button x:Name="StartGameButton"
-                Clicked="OnStartGameClicked"
-                HeightRequest="50"
-                CornerRadius="12"/>
+                Text=""
+                HeightRequest="55"
+                CornerRadius="18"
+                BackgroundColor="#7B4DFF"
+                TextColor="White"
+                FontSize="20"
+                Clicked="OnStartGameClicked"/>
 
         <Button x:Name="ScoresButton"
-                Clicked="OnScoresClicked"
-                HeightRequest="50"
-                CornerRadius="12"/>
+                Text=""
+                HeightRequest="55"
+                CornerRadius="18"
+                BackgroundColor="#3D85C6"
+                TextColor="White"
+                FontSize="20"
+                Clicked="OnScoresClicked"/>
 
         <Button x:Name="SettingsButton"
-                Clicked="OnSettingsClicked"
-                HeightRequest="50"
-                CornerRadius="12"/>
+                Text=""
+                HeightRequest="55"
+                CornerRadius="18"
+                BackgroundColor="#5F5F5F"
+                TextColor="White"
+                FontSize="20"
+                Clicked="OnSettingsClicked"/>
 
     </VerticalStackLayout>
 
