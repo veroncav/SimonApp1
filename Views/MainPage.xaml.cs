@@ -8,102 +8,82 @@ namespace SimonApp1.Views;
 public partial class MainPage : ContentPage
 {
     private readonly SettingsService settings;
-    private readonly ThemeService themeService;
     private readonly LanguageService lang;
     private readonly AppDatabase db;
 
     private List<Button> colorButtons;
     private List<int> sequence = new();
     private List<int> userInput = new();
-    private bool isUserTurn = false;
     private Random rnd = new();
     private int score = 0;
+    private bool isUserTurn = false;
 
-    public MainPage(SettingsService settings, ThemeService themeService, LanguageService lang, AppDatabase db)
+    public MainPage(SettingsService settings, LanguageService lang, AppDatabase db)
     {
         InitializeComponent();
         this.settings = settings;
-        this.themeService = themeService;
         this.lang = lang;
         this.db = db;
 
         colorButtons = new List<Button> { GreenButton, RedButton, BlueButton, YellowButton };
-        NameEntry.Text = settings.PlayerName;
-        UpdateScoreLabel();
-        ApplyLanguage();
+
+        SetLanguage();
+        DisableColorButtons();
     }
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        ApplyLanguage();
-    }
-
-    private void ApplyLanguage()
+    private void SetLanguage()
     {
         TitleLabel.Text = lang.T("game");
         StartButton.Text = lang.T("start");
-        RestartButton.Text = lang.T("restart");
-        SaveScoreButton.Text = lang.T("save");
     }
 
-    private void UpdateScoreLabel() => ScoreLabel.Text = score.ToString();
+    private void DisableColorButtons() => colorButtons.ForEach(b => b.IsEnabled = false);
+    private void EnableColorButtons() => colorButtons.ForEach(b => b.IsEnabled = true);
+
+    private void OnConfirmNameClicked(object sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(PlayerNameEntry.Text))
+            return;
+
+        settings.PlayerName = PlayerNameEntry.Text.Trim();
+        NamePopup.IsVisible = false;
+    }
 
     private async void OnStartClicked(object sender, EventArgs e)
     {
-        var playerName = NameEntry.Text?.Trim();
-        if (string.IsNullOrWhiteSpace(playerName))
-        {
-            await DisplayAlert(lang.T("warning"), lang.T("enter_name"), "OK");
-            return;
-        }
-
-        settings.PlayerName = playerName;
-        NameEntry.IsEnabled = false; // ⛔ Блокируем изменение имени
-
+        score = 0;
         sequence.Clear();
         userInput.Clear();
-        score = 0;
-        isUserTurn = false;
+        ScoreLabel.Text = "0";
         StartButton.IsEnabled = false;
-
-        UpdateScoreLabel();
-        await Task.Delay(300);
         await NextRoundAsync();
     }
 
     private async Task NextRoundAsync()
     {
-        if (sequence.Count >= settings.MaxRounds)
-        {
-            await ShowResultAsync(true);
-            return;
-        }
-
-        sequence.Add(rnd.Next(colorButtons.Count));
+        sequence.Add(rnd.Next(4));
         await PlaySequenceAsync();
-        isUserTurn = true;
         userInput.Clear();
+        isUserTurn = true;
+        EnableColorButtons();
     }
 
     private async Task PlaySequenceAsync()
     {
-        isUserTurn = false;
-        foreach (var idx in sequence)
+        DisableColorButtons();
+        foreach (var index in sequence)
         {
-            await HighlightButton(colorButtons[idx]);
-            await Task.Delay(250);
+            await Highlight(colorButtons[index]);
+            await Task.Delay(200);
         }
     }
 
-    private async Task HighlightButton(Button btn)
+    private async Task Highlight(Button button)
     {
-        var original = btn.BackgroundColor;
-        await btn.ScaleTo(1.15, 120);
-        btn.BackgroundColor = Colors.White;
+        var original = button.BackgroundColor;
+        button.BackgroundColor = Colors.White;
         await Task.Delay(200);
-        btn.BackgroundColor = original;
-        await btn.ScaleTo(1.0, 120);
+        button.BackgroundColor = original;
     }
 
     private async void OnColorClicked(object sender, EventArgs e)
@@ -111,65 +91,45 @@ public partial class MainPage : ContentPage
         if (!isUserTurn) return;
 
         var btn = (Button)sender;
-        int idx = colorButtons.IndexOf(btn);
+        int index = colorButtons.IndexOf(btn);
 
-        await HighlightButton(btn);
-        userInput.Add(idx);
+        await Highlight(btn);
+        userInput.Add(index);
 
         if (userInput[^1] != sequence[userInput.Count - 1])
         {
-            await ShowResultAsync(false);
+            await ShowResult(false);
             return;
         }
 
         if (userInput.Count == sequence.Count)
         {
             score = sequence.Count;
-            UpdateScoreLabel();
+            ScoreLabel.Text = score.ToString();
             isUserTurn = false;
-            await Task.Delay(400);
+            await Task.Delay(500);
             await NextRoundAsync();
         }
     }
 
-    private async Task ShowResultAsync(bool won)
+    private async Task ShowResult(bool win)
     {
-        isUserTurn = false;
+        DisableColorButtons();
+        StartButton.IsEnabled = true;
         Overlay.IsVisible = true;
-        ResultTitle.Text = won ? lang.T("win") : lang.T("lose");
+        ResultTitle.Text = win ? lang.T("win") : lang.T("lose");
         ResultText.Text = $"{lang.T("score")}: {score}";
+        await db.SaveScoreAsync(new ScoreRecord { PlayerName = settings.PlayerName, Score = score, Date = DateTime.Now });
+    }
+
+    private void OnRestartClicked(object sender, EventArgs e)
+    {
+        Overlay.IsVisible = false;
         StartButton.IsEnabled = true;
     }
 
-    private async void OnRestartClicked(object sender, EventArgs e)
+    private async void OnScoresClicked(object sender, EventArgs e)
     {
-        Overlay.IsVisible = false;
-        sequence.Clear();
-        userInput.Clear();
-        score = 0;
-
-        NameEntry.IsEnabled = true; // ✅ Теперь имя можно снова редактировать
-
-        UpdateScoreLabel();
-        await Task.Delay(100);
-    }
-
-    private async void OnSaveScoreClicked(object sender, EventArgs e)
-    {
-        Overlay.IsVisible = false;
-        await db.SaveScoreAsync(new ScoreRecord
-        {
-            PlayerName = settings.PlayerName,
-            Score = score,
-            Date = DateTime.Now
-        });
-        await DisplayAlert(lang.T("saved"), lang.T("record_saved"), "OK");
-    }
-
-    private async void OnSettingsClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(
-            App.Current.Handler.MauiContext.Services.GetService<SettingsPage>()
-        );
+        await DisplayAlert(lang.T("records"), "Здесь будет список результатов (сделаем позже)", "OK");
     }
 }

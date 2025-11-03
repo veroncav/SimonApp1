@@ -1,85 +1,111 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimonApp1.Views.MainPage"
-             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
+             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1A1A1A}">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
+    <Grid>
 
-        <!-- Название игры -->
-        <Label x:Name="TitleLabel"
-               Text="Саймон"
-               FontSize="28"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" />
+        <!-- ===== Popup для ввода имени ===== -->
+        <Grid x:Name="NamePopup"
+              BackgroundColor="#80000000"
+              VerticalOptions="Fill" HorizontalOptions="Fill">
 
-        <!-- Имя игрока -->
-        <Entry x:Name="NameEntry"
-               Grid.Row="1"
-               Placeholder="Введите имя игрока" />
+            <Frame Padding="20"
+                   BackgroundColor="{AppThemeBinding Light=White, Dark=#2A2A2A}"
+                   CornerRadius="18"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="12">
 
-        <!-- Очки -->
-        <Label Grid.Row="2"
-               Text="Очки:"
-               FontSize="20"
-               HorizontalOptions="Center" />
-        <Label x:Name="ScoreLabel"
-               Grid.Row="2"
-               FontSize="20"
-               FontAttributes="Bold"
-               HorizontalOptions="End" />
+                    <Label Text="{Binding Source={x:Reference Name=TitleLabel}, Path=Text}"
+                           FontSize="22" HorizontalOptions="Center"/>
 
-        <!-- Игровое поле -->
-        <Grid Grid.Row="3"
-              ColumnDefinitions="*,*"
-              RowDefinitions="*,*"
-              HorizontalOptions="Center"
-              VerticalOptions="Center"
-              ColumnSpacing="10" RowSpacing="10">
+                    <Entry x:Name="PlayerNameEntry"
+                           Placeholder="Введите имя"
+                           HorizontalOptions="Center" WidthRequest="200"/>
 
-            <Button x:Name="GreenButton" BackgroundColor="Green" Clicked="OnColorClicked"/>
-            <Button x:Name="RedButton" Grid.Column="1" BackgroundColor="Red" Clicked="OnColorClicked"/>
-            <Button x:Name="BlueButton" Grid.Row="1" BackgroundColor="Blue" Clicked="OnColorClicked"/>
-            <Button x:Name="YellowButton" Grid.Row="1" Grid.Column="1" BackgroundColor="Yellow" Clicked="OnColorClicked"/>
-
+                    <Button Text="OK"
+                            Clicked="OnConfirmNameClicked"
+                            BackgroundColor="#6C4DFF"
+                            TextColor="White"
+                            CornerRadius="12"/>
+                </VerticalStackLayout>
+            </Frame>
         </Grid>
 
-        <!-- Кнопки -->
-        <StackLayout Grid.Row="4" Orientation="Horizontal" Spacing="15" HorizontalOptions="Center">
+
+        <!-- ===== Основной экран ===== -->
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+
+            <Label x:Name="TitleLabel"
+                   Text="Игра"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="Очки:" FontSize="18" HorizontalOptions="Center"/>
+            <Label x:Name="ScoreLabel" Text="0" FontSize="36" HorizontalOptions="Center"/>
+
+
+            <Grid ColumnDefinitions="150,150" RowDefinitions="150,150" HorizontalOptions="Center">
+
+                <Button x:Name="GreenButton" Grid.Row="0" Grid.Column="0"
+                        BackgroundColor="Green" CornerRadius="30"
+                        Clicked="OnColorClicked"/>
+
+                <Button x:Name="RedButton" Grid.Row="0" Grid.Column="1"
+                        BackgroundColor="Red" CornerRadius="30"
+                        Clicked="OnColorClicked"/>
+
+                <Button x:Name="BlueButton" Grid.Row="1" Grid.Column="0"
+                        BackgroundColor="Blue" CornerRadius="30"
+                        Clicked="OnColorClicked"/>
+
+                <Button x:Name="YellowButton" Grid.Row="1" Grid.Column="1"
+                        BackgroundColor="Yellow" CornerRadius="30"
+                        Clicked="OnColorClicked"/>
+
+            </Grid>
 
             <Button x:Name="StartButton"
-                    Text="Старт"
+                    Text="Начать игру"
                     Clicked="OnStartClicked"
-                    WidthRequest="120"/>
+                    BackgroundColor="#6C4DFF"
+                    TextColor="White"
+                    CornerRadius="14"
+                    HeightRequest="50"/>
 
-            <Button x:Name="RestartButton"
-                    Text="Заново"
-                    Clicked="OnRestartClicked"
-                    WidthRequest="120"/>
+        </VerticalStackLayout>
 
-            <Button x:Name="SaveScoreButton"
-                    Text="Сохранить"
-                    Clicked="OnSaveScoreClicked"
-                    WidthRequest="120"/>
 
-        </StackLayout>
-
-        <!-- Окошко результата -->
+        <!-- ===== Popup результата ===== -->
         <Grid x:Name="Overlay"
-              Grid.RowSpan="5"
               BackgroundColor="#80000000"
               IsVisible="False"
               VerticalOptions="Fill" HorizontalOptions="Fill">
 
-            <Frame BackgroundColor="White" CornerRadius="14" Padding="20"
+            <Frame Padding="25"
+                   BackgroundColor="{AppThemeBinding Light=White, Dark=#2A2A2A}"
+                   CornerRadius="18"
                    VerticalOptions="Center" HorizontalOptions="Center">
 
-                <StackLayout Spacing="15" HorizontalOptions="Center">
-                    <Label x:Name="ResultTitle" FontSize="26" HorizontalOptions="Center"/>
-                    <Label x:Name="ResultText" FontSize="20" HorizontalOptions="Center"/>
+                <VerticalStackLayout Spacing="14" HorizontalOptions="Center">
 
-                    <Button Text="ОК" Clicked="OnRestartClicked" WidthRequest="120"/>
-                </StackLayout>
+                    <Label x:Name="ResultTitle"
+                           FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
 
+                    <Label x:Name="ResultText"
+                           FontSize="18" HorizontalOptions="Center"/>
+
+                    <Button Text="Играть снова"
+                            Clicked="OnRestartClicked"
+                            BackgroundColor="#6C4DFF" TextColor="White" CornerRadius="12"/>
+
+                    <Button Text="Таблица рекордов"
+                            Clicked="OnScoresClicked"
+                            BackgroundColor="#3A3A3A" TextColor="White" CornerRadius="12"/>
+
+                </VerticalStackLayout>
             </Frame>
         </Grid>
 
