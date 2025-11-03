@@ -18,14 +18,16 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
-        // 1. Регистрируем сервисы
+        // ✅ Регистрируем сервисы
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<ThemeService>();
+        builder.Services.AddSingleton<LanguageService>(); // ← заменили LocalizationService на LanguageService
 
-        // 2. Регистрируем базу данных
+        // ✅ Регистрируем базу данных
         builder.Services.AddSingleton<AppDatabase>();
 
-        // 3. Регистрируем страницы
+        // ✅ Регистрируем страницы
+        builder.Services.AddTransient<WelcomePage>();
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<SettingsPage>();
 

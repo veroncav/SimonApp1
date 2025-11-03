@@ -9,6 +9,7 @@ public partial class MainPage : ContentPage
 {
     private readonly SettingsService settings;
     private readonly ThemeService themeService;
+    private readonly LanguageService lang;
     private readonly AppDatabase db;
 
     private List<Button> colorButtons;
@@ -18,16 +19,32 @@ public partial class MainPage : ContentPage
     private Random rnd = new();
     private int score = 0;
 
-    public MainPage(SettingsService settings, ThemeService themeService, AppDatabase db)
+    public MainPage(SettingsService settings, ThemeService themeService, LanguageService lang, AppDatabase db)
     {
         InitializeComponent();
         this.settings = settings;
         this.themeService = themeService;
+        this.lang = lang;
         this.db = db;
 
         colorButtons = new List<Button> { GreenButton, RedButton, BlueButton, YellowButton };
         NameEntry.Text = settings.PlayerName;
         UpdateScoreLabel();
+        ApplyLanguage();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ApplyLanguage(); // 🔄 обновляем язык при возврате со страницы настроек
+    }
+
+    private void ApplyLanguage()
+    {
+        TitleLabel.Text = lang.T("game");
+        StartButton.Text = lang.T("start");
+        RestartButton.Text = lang.T("restart");
+        SaveScoreButton.Text = lang.T("save");
     }
 
     private void UpdateScoreLabel() => ScoreLabel.Text = score.ToString();
@@ -37,7 +54,7 @@ public partial class MainPage : ContentPage
         var playerName = NameEntry.Text?.Trim();
         if (string.IsNullOrWhiteSpace(playerName))
         {
-            await DisplayAlert("Ошибка", "Введите имя игрока", "OK");
+            await DisplayAlert(lang.T("warning"), lang.T("enter_name"), "OK");
             return;
         }
 
@@ -117,8 +134,8 @@ public partial class MainPage : ContentPage
     {
         isUserTurn = false;
         Overlay.IsVisible = true;
-        ResultTitle.Text = won ? "Победа!" : "Ошибка!";
-        ResultText.Text = $"Очки: {score}";
+        ResultTitle.Text = won ? lang.T("win") : lang.T("lose");
+        ResultText.Text = $"{lang.T("score")}: {score}";
         StartButton.IsEnabled = true;
     }
 
@@ -141,11 +158,13 @@ public partial class MainPage : ContentPage
             Score = score,
             Date = DateTime.Now
         });
-        await DisplayAlert("Сохранено", "Рекорд записан!", "OK");
+        await DisplayAlert(lang.T("saved"), lang.T("record_saved"), "OK");
     }
 
     private async void OnSettingsClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new SettingsPage(settings, themeService));
+        await Navigation.PushAsync(
+            App.Current.Handler.MauiContext.Services.GetService<SettingsPage>()
+        );
     }
 }

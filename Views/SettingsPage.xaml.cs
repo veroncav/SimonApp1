@@ -1,50 +1,60 @@
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
+п»їusing Microsoft.Maui.Controls;
 using SimonApp1.Services;
 
-namespace SimonApp1.Views;
-
-public partial class SettingsPage : ContentPage
+namespace SimonApp1.Views
 {
-    private readonly SettingsService _settings;
-    private readonly ThemeService _themeService;
-
-    public SettingsPage(SettingsService settings, ThemeService themeService)
+    public partial class SettingsPage : ContentPage
     {
-        InitializeComponent();
-        _settings = settings;
-        _themeService = themeService;
+        private readonly SettingsService _settings;
+        private readonly ThemeService _themeService;
+        private readonly LanguageService _lang;
 
-        // Инициализация текущих значений на странице
-        SoundSwitch.IsToggled = _settings.SoundOn;
-        ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
-        LanguagePicker.SelectedItem = Preferences.Get("app_language", "Eesti");
-    }
-
-    private void OnSoundToggled(object sender, ToggledEventArgs e)
-    {
-        _settings.SoundOn = e.Value;
-    }
-
-    private void OnThemeChanged(object sender, EventArgs e)
-    {
-        if (ThemePicker.SelectedItem is string theme)
+        public SettingsPage(SettingsService settings, ThemeService themeService, LanguageService lang)
         {
-            AppTheme appTheme = theme == "Dark" ? AppTheme.Dark : AppTheme.Light;
-            _themeService.SetTheme(appTheme);
-        }
-    }
+            InitializeComponent();
+            _settings = settings;
+            _themeService = themeService;
+            _lang = lang;
 
-    private void OnLanguageChanged(object sender, EventArgs e)
-    {
-        if (LanguagePicker.SelectedItem is string lang)
+            SoundSwitch.IsToggled = _settings.SoundOn;
+            ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
+
+            LanguagePicker.ItemsSource = new List<string> { "ru", "en", "et" };
+            LanguagePicker.SelectedItem = _lang.CurrentLanguage;
+
+            ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
         {
-            Preferences.Set("app_language", lang);
+            LabelSettings.Text = _lang.T("settings");
+            LabelTheme.Text = _lang.T("theme");
+            LabelSound.Text = _lang.T("sound");
+            LabelLanguage.Text = _lang.T("language");
+            ButtonBack.Text = _lang.T("back");
         }
-    }
 
-    private async void OnBackClicked(object sender, EventArgs e)
-    {
-        await Navigation.PopAsync();
+        private void OnLanguageChanged(object sender, EventArgs e)
+        {
+            if (LanguagePicker.SelectedItem is string lang)
+            {
+                _lang.CurrentLanguage = lang;
+                ApplyLanguage(); // рџ”„ СЃСЂР°Р·Сѓ РѕР±РЅРѕРІРёС‚СЊ UI
+            }
+        }
+
+        private void OnSoundToggled(object sender, ToggledEventArgs e) =>
+            _settings.SoundOn = e.Value;
+
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            if (ThemePicker.SelectedItem is string theme)
+                _themeService.SetTheme(theme == "Dark" ? AppTheme.Dark : AppTheme.Light);
+        }
+
+        private async void OnBackClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
     }
 }

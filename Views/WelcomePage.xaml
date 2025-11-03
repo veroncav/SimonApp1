@@ -1,57 +1,31 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="SimonApp1.Views.WelcomePage"
-    BackgroundColor="#0a0a0f">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SimonApp1.Views.WelcomePage"
+             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
 
-    <Grid RowDefinitions="*,Auto" Padding="20">
-        <VerticalStackLayout VerticalOptions="Center" Spacing="25">
-            <Label Text="Welcome to" 
-                   FontSize="26" 
-                   HorizontalOptions="Center" 
-                   TextColor="#00FFFF"/>
+    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
 
-            <Label Text="SIMON SAYS" 
-                   FontSize="42" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="#FF00FF" />
+        <!-- Заголовок тоже переведём -->
+        <Label x:Name="TitleLabel"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
 
-            <Label Text="Test your memory and reflexes!" 
-                   FontSize="18" 
-                   HorizontalOptions="Center" 
-                   TextColor="White" 
-                   Opacity="0.8"/>
+        <Button x:Name="StartGameButton"
+                Clicked="OnStartGameClicked"
+                HeightRequest="50"
+                CornerRadius="12"/>
 
-            <VerticalStackLayout Spacing="15" Margin="0,20,0,0">
-                <Button Text="Start Game" 
-                        Clicked="OnStartGameClicked" 
-                        BackgroundColor="#00FFFF" 
-                        TextColor="Black" 
-                        CornerRadius="20" 
-                        HeightRequest="50"/>
+        <Button x:Name="ScoresButton"
+                Clicked="OnScoresClicked"
+                HeightRequest="50"
+                CornerRadius="12"/>
 
-                <Button Text="High Scores" 
-                        Clicked="OnScoresClicked" 
-                        BackgroundColor="#FF00FF" 
-                        TextColor="White" 
-                        CornerRadius="20" 
-                        HeightRequest="50"/>
+        <Button x:Name="SettingsButton"
+                Clicked="OnSettingsClicked"
+                HeightRequest="50"
+                CornerRadius="12"/>
 
-                <Button Text="Settings" 
-                        Clicked="OnSettingsClicked" 
-                        BackgroundColor="#222" 
-                        TextColor="White" 
-                        CornerRadius="20" 
-                        HeightRequest="50"/>
-            </VerticalStackLayout>
-        </VerticalStackLayout>
+    </VerticalStackLayout>
 
-        <Label Grid.Row="1" 
-               Text="© 2025 SimonApp" 
-               HorizontalOptions="Center" 
-               VerticalOptions="End" 
-               TextColor="#444"/>
-    </Grid>
 </ContentPage>

@@ -1,113 +1,87 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimonApp1.Views.MainPage"
-             BackgroundColor="#050510"
-             Title="Simon Says">
+             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
 
-    <Grid>
-        <!-- Центральная панель -->
-        <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="20" RowSpacing="20">
 
-            <!-- Заголовок -->
-            <Label Text="SIMON SAYS"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="#00FFFF"
-                   Shadow="0,0,15,#00FFFF"
-                   Margin="0,10"/>
+        <!-- Название игры -->
+        <Label x:Name="TitleLabel"
+               Text="Саймон"
+               FontSize="28"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
 
-            <!-- Игровая зона -->
-            <Grid Grid.Row="1"
-                  RowSpacing="15"
-                  ColumnSpacing="15"
-                  HorizontalOptions="Center"
-                  VerticalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="150"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+        <!-- Имя игрока -->
+        <Entry x:Name="NameEntry"
+               Grid.Row="1"
+               Placeholder="Введите имя игрока" />
 
-                <Button x:Name="GreenButton" 
-                        Grid.Row="0" Grid.Column="0"
-                        BackgroundColor="#00FF88"
-                        Opacity="0.9"
-                        Clicked="OnColorClicked"
-                        CornerRadius="75"/>
+        <!-- Очки -->
+        <Label Grid.Row="2"
+               Text="Очки:"
+               FontSize="20"
+               HorizontalOptions="Center" />
+        <Label x:Name="ScoreLabel"
+               Grid.Row="2"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="End" />
 
-                <Button x:Name="RedButton" 
-                        Grid.Row="0" Grid.Column="1"
-                        BackgroundColor="#FF0044"
-                        Opacity="0.9"
-                        Clicked="OnColorClicked"
-                        CornerRadius="75"/>
+        <!-- Игровое поле -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*,*"
+              RowDefinitions="*,*"
+              HorizontalOptions="Center"
+              VerticalOptions="Center"
+              ColumnSpacing="10" RowSpacing="10">
 
-                <Button x:Name="BlueButton" 
-                        Grid.Row="1" Grid.Column="0"
-                        BackgroundColor="#0066FF"
-                        Opacity="0.9"
-                        Clicked="OnColorClicked"
-                        CornerRadius="75"/>
+            <Button x:Name="GreenButton" BackgroundColor="Green" Clicked="OnColorClicked"/>
+            <Button x:Name="RedButton" Grid.Column="1" BackgroundColor="Red" Clicked="OnColorClicked"/>
+            <Button x:Name="BlueButton" Grid.Row="1" BackgroundColor="Blue" Clicked="OnColorClicked"/>
+            <Button x:Name="YellowButton" Grid.Row="1" Grid.Column="1" BackgroundColor="Yellow" Clicked="OnColorClicked"/>
 
-                <Button x:Name="YellowButton" 
-                        Grid.Row="1" Grid.Column="1"
-                        BackgroundColor="#FFD700"
-                        Opacity="0.9"
-                        Clicked="OnColorClicked"
-                        CornerRadius="75"/>
-
-                <!-- Центральный круг -->
-                <Border Grid.RowSpan="2" Grid.ColumnSpan="2"
-                        Stroke="#00FFFF"
-                        StrokeThickness="4"
-                        BackgroundColor="#111"
-                        WidthRequest="100"
-                        HeightRequest="100"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        StrokeShape="Ellipse">
-                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label x:Name="ScoreLabel" 
-                               Text="0" 
-                               FontSize="32"
-                               FontAttributes="Bold"
-                               TextColor="#00FFFF"
-                               HorizontalOptions="Center"/>
-                        <Button Text="Start" x:Name="StartButton"
-                                Clicked="OnStartClicked"
-                                BackgroundColor="#00FFFF"
-                                TextColor="Black"
-                                CornerRadius="20"
-                                Margin="0,8,0,0"/>
-                    </StackLayout>
-                </Border>
-            </Grid>
-
-            <!-- Имя игрока -->
-            <StackLayout Grid.Row="2" Orientation="Horizontal" Spacing="10" HorizontalOptions="Center">
-                <Label Text="Имя:" TextColor="White" VerticalOptions="Center"/>
-                <Entry x:Name="NameEntry" WidthRequest="120" Placeholder="Player" />
-                <Button Text="Настройки" Clicked="OnSettingsClicked" BackgroundColor="#222" TextColor="White"/>
-            </StackLayout>
         </Grid>
 
-        <!-- Результат -->
-        <Grid x:Name="Overlay" BackgroundColor="#AA000000" IsVisible="False">
-            <Border VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="#111"
-                    Stroke="#00FFFF" StrokeThickness="2" StrokeShape="RoundRectangle 12" Padding="20">
-                <VerticalStackLayout Spacing="10">
-                    <Label x:Name="ResultTitle" FontSize="24" FontAttributes="Bold" TextColor="#00FFFF" HorizontalOptions="Center"/>
-                    <Label x:Name="ResultText" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                        <Button Text="Играть снова" Clicked="OnRestartClicked" BackgroundColor="#00FFFF" TextColor="Black"/>
-                        <Button Text="Сохранить" Clicked="OnSaveScoreClicked" BackgroundColor="#FF00FF" TextColor="White"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Border>
+        <!-- Кнопки -->
+        <StackLayout Grid.Row="4" Orientation="Horizontal" Spacing="15" HorizontalOptions="Center">
+
+            <Button x:Name="StartButton"
+                    Text="Старт"
+                    Clicked="OnStartClicked"
+                    WidthRequest="120"/>
+
+            <Button x:Name="RestartButton"
+                    Text="Заново"
+                    Clicked="OnRestartClicked"
+                    WidthRequest="120"/>
+
+            <Button x:Name="SaveScoreButton"
+                    Text="Сохранить"
+                    Clicked="OnSaveScoreClicked"
+                    WidthRequest="120"/>
+
+        </StackLayout>
+
+        <!-- Окошко результата -->
+        <Grid x:Name="Overlay"
+              Grid.RowSpan="5"
+              BackgroundColor="#80000000"
+              IsVisible="False"
+              VerticalOptions="Fill" HorizontalOptions="Fill">
+
+            <Frame BackgroundColor="White" CornerRadius="14" Padding="20"
+                   VerticalOptions="Center" HorizontalOptions="Center">
+
+                <StackLayout Spacing="15" HorizontalOptions="Center">
+                    <Label x:Name="ResultTitle" FontSize="26" HorizontalOptions="Center"/>
+                    <Label x:Name="ResultText" FontSize="20" HorizontalOptions="Center"/>
+
+                    <Button Text="ОК" Clicked="OnRestartClicked" WidthRequest="120"/>
+                </StackLayout>
+
+            </Frame>
         </Grid>
+
     </Grid>
 </ContentPage>
