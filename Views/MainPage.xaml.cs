@@ -28,14 +28,8 @@ public partial class MainPage : ContentPage
 
         colorButtons = new() { GreenButton, RedButton, BlueButton, YellowButton };
 
-        ApplyLanguage();
         DisableColorButtons();
         StartButton.IsEnabled = false;
-    }
-
-    private void ApplyLanguage()
-    {
-        StartButton.Text = lang.T("start");
     }
 
     private void OnConfirmNameClicked(object sender, EventArgs e)
@@ -70,16 +64,14 @@ public partial class MainPage : ContentPage
         userInput.Clear();
         UpdateScore();
 
-        await Task.Delay(250);
         await NextRoundAsync();
     }
 
     private async Task NextRoundAsync()
     {
-        // ✅ Окончание игры при достижении лимита
-        if (sequence.Count == settings.MaxRounds)
+        if (sequence.Count >= settings.MaxRounds)
         {
-            await GameOver(win: true);
+            await WinGameAsync();
             return;
         }
 
@@ -106,44 +98,39 @@ public partial class MainPage : ContentPage
 
         var btn = (Button)sender;
         int index = colorButtons.IndexOf(btn);
-
         await Blink(btn);
         userInput.Add(index);
 
-        // ❌ Ошибка игрока
         if (userInput[^1] != sequence[userInput.Count - 1])
         {
-            await GameOver(win: false);
+            await GameOver();
             return;
         }
 
-        // ✅ Игрок повторил всё → следующий раунд
         if (userInput.Count == sequence.Count)
         {
             score = sequence.Count;
             UpdateScore();
             isUserTurn = false;
-            await Task.Delay(400);
             await NextRoundAsync();
         }
     }
 
-    private async Task GameOver(bool win)
+    private async Task GameOver()
     {
         DisableColorButtons();
         isUserTurn = false;
         StartButton.IsEnabled = true;
 
-        await db.SaveScoreAsync(new ScoreRecord
-        {
-            PlayerName = settings.PlayerName,
-            Score = score,
-            Date = DateTime.Now
-        });
+        await DisplayAlert("Проигрыш", $"Очки: {score}", "OK");
+    }
 
-        string title = win ? "🎉 Победа!" : lang.T("lose");
-        string msg = $"{lang.T("score")}: {score}";
+    private async Task WinGameAsync()
+    {
+        DisableColorButtons();
+        isUserTurn = false;
+        StartButton.IsEnabled = true;
 
-        await DisplayAlert(title, msg, "OK");
+        await DisplayAlert("Победа!", $"Ты прошёл {settings.MaxRounds} раундов!", "Круто!");
     }
 }

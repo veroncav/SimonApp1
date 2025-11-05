@@ -6,17 +6,16 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!-- 🎨 Цвета -->
+            <!-- 🌗 Основные динамические цвета -->
+            <Color x:Key="BackgroundColor">#FFFFFF</Color>
+            <Color x:Key="CardColor">#F4F4F4</Color>
+            <Color x:Key="TextColor">#000000</Color>
+
+            <!-- 🎨 Тематические цвета -->
             <Color x:Key="PrimaryBlue">#4A90FF</Color>
             <Color x:Key="PrimaryBlueLight">#66D1FF</Color>
 
-            <Color x:Key="BackgroundLight">#FFFFFF</Color>
-            <Color x:Key="BackgroundDark">#121212</Color>
-
-            <Color x:Key="TextLight">#000000</Color>
-            <Color x:Key="TextDark">#FFFFFF</Color>
-
-            <!-- 🟦 Градиент для заголовка -->
+            <!-- 🟦 Градиент заголовка -->
             <LinearGradientBrush x:Key="TitleGradient" StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="{StaticResource PrimaryBlueLight}" Offset="0.1"/>
                 <GradientStop Color="{StaticResource PrimaryBlue}" Offset="0.9"/>
@@ -27,31 +26,31 @@
                 <Setter Property="FontSize" Value="48"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
-                <Setter Property="TextColor" Value="{StaticResource TitleGradient}"/>
+                <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
                 <Setter Property="Shadow">
                     <Setter.Value>
                         <Shadow Brush="{StaticResource PrimaryBlue}"
                                 Offset="0,4"
-                                Radius="16"
-                                Opacity="0.8"/>
+                                Radius="14"
+                                Opacity="0.7"/>
                     </Setter.Value>
                 </Setter>
             </Style>
 
-            <!-- 🔹 Обычные кнопки (меню, настройки, старт и т.д.) -->
+            <!-- 🔹 Кнопки меню -->
             <Style TargetType="Button" x:Key="MenuButtonStyle">
                 <Setter Property="HeightRequest" Value="55"/>
                 <Setter Property="CornerRadius" Value="16"/>
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
-                <Setter Property="BackgroundColor" Value="#6C8BFF"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryBlue}"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="Shadow">
                     <Setter.Value>
                         <Shadow Brush="Black"
-                                Offset="0,4"
-                                Radius="12"
-                                Opacity="0.35"/>
+                                Offset="0,5"
+                                Radius="14"
+                                Opacity="0.38"/>
                     </Setter.Value>
                 </Setter>
             </Style>
@@ -65,7 +64,7 @@
                     <Setter.Value>
                         <Shadow Brush="Black"
                                 Offset="0,6"
-                                Radius="18"
+                                Radius="20"
                                 Opacity="0.45"/>
                     </Setter.Value>
                 </Setter>

@@ -1,39 +1,53 @@
-using Microsoft.Maui;
+ï»¿using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 
-namespace SimonApp1.Services;
-
-public class ThemeService
+namespace SimonApp1.Services
 {
-    private const string ThemeKey = "AppTheme";
-
-    public AppTheme CurrentTheme { get; private set; }
-
-    public ThemeService()
+    public class ThemeService
     {
-        // Çàãðóæàåì ñîõðàí¸ííóþ òåìó
-        var savedTheme = Preferences.Get(ThemeKey, "Light");
-        CurrentTheme = savedTheme == "Dark" ? AppTheme.Dark : AppTheme.Light;
-        ApplyTheme(CurrentTheme);
-    }
+        private const string ThemeKey = "AppTheme";
 
-    public void ToggleTheme()
-    {
-        if (CurrentTheme == AppTheme.Dark)
-            SetTheme(AppTheme.Light);
-        else
-            SetTheme(AppTheme.Dark);
-    }
+        public AppTheme CurrentTheme { get; private set; }
 
-    public void SetTheme(AppTheme theme)
-    {
-        CurrentTheme = theme;
-        Preferences.Set(ThemeKey, theme == AppTheme.Dark ? "Dark" : "Light");
-        ApplyTheme(theme);
-    }
+        public ThemeService()
+        {
+            string saved = Preferences.Get(ThemeKey, "Light");
+            SetTheme(saved == "Dark" ? AppTheme.Dark : AppTheme.Light, false);
+        }
 
-    private void ApplyTheme(AppTheme theme)
-    {
-        Application.Current!.UserAppTheme = theme;
+        public void SetTheme(AppTheme theme, bool save = true)
+        {
+            CurrentTheme = theme;
+
+            if (save)
+                Preferences.Set(ThemeKey, theme == AppTheme.Dark ? "Dark" : "Light");
+
+            Application.Current!.UserAppTheme = theme;
+
+            // ðŸ”¥ ÐŸÐ•Ð Ð•Ð Ð˜Ð¡ÐžÐ’Ð«Ð’ÐÐ•Ðœ ÑÑ‚Ð¸Ð»Ð¸ Ð³Ð»Ð¾Ð±Ð°Ð»ÑŒÐ½Ð¾
+            UpdateColors();
+        }
+
+        public void ToggleTheme() =>
+            SetTheme(CurrentTheme == AppTheme.Dark ? AppTheme.Light : AppTheme.Dark);
+
+        private void UpdateColors()
+        {
+            var resources = Application.Current!.Resources;
+
+            if (CurrentTheme == AppTheme.Dark)
+            {
+                resources["BackgroundColor"] = Color.FromArgb("#1A1A1A");
+                resources["CardColor"] = Color.FromArgb("#2A2A2A");
+                resources["TextColor"] = Colors.White;
+            }
+            else
+            {
+                resources["BackgroundColor"] = Colors.White;
+                resources["CardColor"] = Color.FromArgb("#F4F4F4");
+                resources["TextColor"] = Colors.Black;
+            }
+        }
     }
 }
