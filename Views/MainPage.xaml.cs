@@ -1,7 +1,9 @@
 ﻿using Microsoft.Maui.Controls;
 using SimonApp1.Database;
-using SimonApp1.Models;
 using SimonApp1.Services;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimonApp1.Views;
 
@@ -10,6 +12,7 @@ public partial class MainPage : ContentPage
     private readonly SettingsService settings;
     private readonly LanguageService lang;
     private readonly AppDatabase db;
+    private readonly SoundService _sound;
 
     private readonly List<Button> colorButtons;
     private readonly List<int> sequence = new();
@@ -19,27 +22,27 @@ public partial class MainPage : ContentPage
     private bool isUserTurn = false;
     private int score = 0;
 
-    public MainPage(SettingsService settings, LanguageService lang, AppDatabase db)
+    public MainPage(SettingsService settings, LanguageService lang, AppDatabase db, SoundService sound)
     {
         InitializeComponent();
         this.settings = settings;
         this.lang = lang;
         this.db = db;
+        _sound = sound;
 
         colorButtons = new() { GreenButton, RedButton, BlueButton, YellowButton };
 
         DisableColorButtons();
         StartButton.IsEnabled = false;
+
+        // Устанавливаем правильную иконку при входе
+        SoundToggleButton.Text = _sound.IsSoundEnabled ? "🔊" : "🔇";
     }
 
-    private void OnConfirmNameClicked(object sender, EventArgs e)
+    private void OnSoundToggleClicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(PlayerNameEntry.Text))
-            return;
-
-        settings.PlayerName = PlayerNameEntry.Text.Trim();
-        NamePopup.IsVisible = false;
-        StartButton.IsEnabled = true;
+        _sound.IsSoundEnabled = !_sound.IsSoundEnabled;
+        SoundToggleButton.Text = _sound.IsSoundEnabled ? "🔊" : "🔇";
     }
 
     private void DisableColorButtons() => colorButtons.ForEach(b => b.IsEnabled = false);
@@ -56,6 +59,16 @@ public partial class MainPage : ContentPage
         await btn.ScaleTo(1.0, 120);
     }
 
+    private void OnConfirmNameClicked(object sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(PlayerNameEntry.Text))
+            return;
+
+        settings.PlayerName = PlayerNameEntry.Text.Trim();
+        NamePopup.IsVisible = false;
+        StartButton.IsEnabled = true;
+    }
+
     private async void OnStartClicked(object sender, EventArgs e)
     {
         StartButton.IsEnabled = false;
@@ -63,7 +76,6 @@ public partial class MainPage : ContentPage
         sequence.Clear();
         userInput.Clear();
         UpdateScore();
-
         await NextRoundAsync();
     }
 
@@ -88,6 +100,7 @@ public partial class MainPage : ContentPage
         foreach (var i in sequence)
         {
             await Blink(colorButtons[i]);
+            await _sound.PlaySfxAsync("click1.wav", 0.8);
             await Task.Delay(200);
         }
     }
@@ -98,7 +111,10 @@ public partial class MainPage : ContentPage
 
         var btn = (Button)sender;
         int index = colorButtons.IndexOf(btn);
+
         await Blink(btn);
+        await _sound.PlaySfxAsync("click1.wav", 0.9);
+
         userInput.Add(index);
 
         if (userInput[^1] != sequence[userInput.Count - 1])
@@ -121,7 +137,6 @@ public partial class MainPage : ContentPage
         DisableColorButtons();
         isUserTurn = false;
         StartButton.IsEnabled = true;
-
         await DisplayAlert("Проигрыш", $"Очки: {score}", "OK");
     }
 
@@ -130,7 +145,6 @@ public partial class MainPage : ContentPage
         DisableColorButtons();
         isUserTurn = false;
         StartButton.IsEnabled = true;
-
         await DisplayAlert("Победа!", $"Ты прошёл {settings.MaxRounds} раундов!", "Круто!");
     }
 }

@@ -6,7 +6,19 @@
 
     <Grid>
 
-        <!-- Игровое поле -->
+        <!-- 🔊 Кнопка звука -->
+        <Button x:Name="SoundToggleButton"
+                Text="🔊"
+                Clicked="OnSoundToggleClicked"
+                BackgroundColor="Transparent"
+                FontSize="30"
+                Padding="8"
+                Margin="10"
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                ZIndex="100"/>
+
+        <!-- Игровой интерфейс -->
         <VerticalStackLayout Padding="30" Spacing="18" VerticalOptions="Center" HorizontalOptions="Center">
 
             <Label Text="Simon Says"
@@ -26,7 +38,6 @@
                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                    HorizontalOptions="Center" />
 
-            <!-- Кнопки -->
             <Grid HorizontalOptions="Center"
                   ColumnDefinitions="150,150"
                   RowDefinitions="150,150"
@@ -67,8 +78,6 @@
                     Clicked="OnStartClicked"/>
         </VerticalStackLayout>
 
-
-        <!-- Окно ввода имени -->
         <Grid x:Name="NamePopup"
               BackgroundColor="#80000088"
               IsVisible="True"
