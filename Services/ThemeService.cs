@@ -12,8 +12,9 @@ namespace SimonApp1.Services
 
         public ThemeService()
         {
+            // ❗ Только читаем сохранённую тему, но НЕ вызываем SetTheme здесь
             string saved = Preferences.Get(ThemeKey, "Light");
-            SetTheme(saved == "Dark" ? AppTheme.Dark : AppTheme.Light, false);
+            CurrentTheme = saved == "Dark" ? AppTheme.Dark : AppTheme.Light;
         }
 
         public void SetTheme(AppTheme theme, bool save = true)
@@ -23,9 +24,10 @@ namespace SimonApp1.Services
             if (save)
                 Preferences.Set(ThemeKey, theme == AppTheme.Dark ? "Dark" : "Light");
 
+            // ✅ Теперь Application.Current точно существует, так как SetTheme вызывается из App.xaml.cs
             Application.Current!.UserAppTheme = theme;
 
-            // 🔥 ПЕРЕРИСОВЫВАЕМ стили глобально
+            // Перерисовываем глобальные ресурсы
             UpdateColors();
         }
 

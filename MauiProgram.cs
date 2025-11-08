@@ -3,6 +3,7 @@ using Microsoft.Maui.Hosting;
 using SimonApp1.Database;
 using SimonApp1.Services;
 using SimonApp1.Views;
+using Plugin.Maui.Audio;
 
 #if ANDROID
 using Microsoft.Maui.Handlers;
@@ -24,19 +25,23 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
-        // ✅ Регистрируем сервисы
+        // ✅ Сервисы приложения
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<ThemeService>();
         builder.Services.AddSingleton<LanguageService>();
         builder.Services.AddSingleton<AppDatabase>();
 
-        // ✅ Регистрируем страницы
+        // ✅ Добавляем АУДИО
+        builder.Services.AddSingleton(AudioManager.Current);
+        builder.Services.AddSingleton<SoundService>();
+
+        // ✅ Страницы
         builder.Services.AddTransient<WelcomePage>();
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<SettingsPage>();
 
 #if ANDROID
-        // ✅ Убираем подчеркивание (underline) в Entry
+        // ✅ Убираем подчеркивание у Entry
         EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
         {
             if (handler.PlatformView != null)
@@ -46,7 +51,7 @@ public static class MauiProgram
             }
         });
 
-        // ✅ Убираем подчеркивание (underline) в Picker
+        // ✅ Убираем подчеркивание у Picker
         PickerHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
         {
             if (handler.PlatformView != null)

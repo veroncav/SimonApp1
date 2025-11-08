@@ -32,6 +32,15 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\bg_music.mp3">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </MauiAsset>
+	  <MauiAsset Update="Resources\Raw\click1.wav">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </MauiAsset>
+	</ItemGroup>
+
 	<!-- ✅ Генерация классов для локализации -->
 
 </Project>
