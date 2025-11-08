@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimonApp1.Views.SettingsPage"
-             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
+             BackgroundColor="{DynamicResource BackgroundColor}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="25">
@@ -9,17 +10,19 @@
             <Label x:Name="LabelSettings"
                    FontSize="24"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"/>
 
             <!-- Theme -->
-            <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Border Padding="15" Background="{DynamicResource CardColor}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelTheme" VerticalOptions="Center" />
-                    <Picker x:Name="ThemePicker" WidthRequest="150" SelectedIndexChanged="OnThemeChanged">
+                    <Picker x:Name="ThemePicker"
+                            WidthRequest="150"
+                            SelectedIndexChanged="OnThemeChanged">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Light</x:String>
@@ -31,7 +34,7 @@
             </Border>
 
             <!-- Sound -->
-            <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Border Padding="15" Background="{DynamicResource CardColor}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
@@ -43,27 +46,32 @@
             </Border>
 
             <!-- Max rounds -->
-            <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Border Padding="15" Background="{DynamicResource CardColor}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelMaxRounds" VerticalOptions="Center" />
-                    <Slider x:Name="MaxRoundsSlider" Minimum="5" Maximum="30" ValueChanged="OnMaxRoundsChanged"/>
+                    <Slider x:Name="MaxRoundsSlider"
+                            Minimum="5"
+                            Maximum="30"
+                            ValueChanged="OnMaxRoundsChanged"/>
                     <Label x:Name="MaxRoundsValue" VerticalOptions="Center"/>
                 </HorizontalStackLayout>
             </Border>
 
             <!-- Language -->
-            <Border Padding="15" Background="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Border Padding="15" Background="{DynamicResource CardColor}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
 
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label x:Name="LabelLanguage" VerticalOptions="Center" />
-                    <Picker x:Name="LanguagePicker" WidthRequest="150" SelectedIndexChanged="OnLanguageChanged"/>
+                    <Picker x:Name="LanguagePicker"
+                            WidthRequest="150"
+                            SelectedIndexChanged="OnLanguageChanged"/>
                 </HorizontalStackLayout>
             </Border>
 
