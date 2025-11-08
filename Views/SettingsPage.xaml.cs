@@ -8,16 +8,18 @@ namespace SimonApp1.Views
         private readonly SettingsService _settings;
         private readonly ThemeService _themeService;
         private readonly LanguageService _lang;
+        private readonly SoundService _sound; // ✅ добавили
 
-        public SettingsPage(SettingsService settings, ThemeService themeService, LanguageService lang)
+        public SettingsPage(SettingsService settings, ThemeService themeService, LanguageService lang, SoundService sound)
         {
             InitializeComponent();
             _settings = settings;
             _themeService = themeService;
             _lang = lang;
+            _sound = sound; // ✅ получили звук
 
             // Initialize UI
-            SoundSwitch.IsToggled = _settings.SoundOn;
+            SoundSwitch.IsToggled = _sound.IsSoundEnabled; // ✅ теперь привязано к SoundService
             ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
 
             LanguagePicker.ItemsSource = new List<string> { "ru", "en", "et" };
@@ -39,9 +41,11 @@ namespace SimonApp1.Views
             ButtonBack.Text = _lang.T("back");
         }
 
+        // ✅ Исправлено — теперь звук реально выключается и включается
         private void OnSoundToggled(object sender, ToggledEventArgs e)
         {
-            _settings.SoundOn = e.Value;
+            _settings.SoundOn = e.Value;        // сохраняем в настройки
+            _sound.IsSoundEnabled = e.Value;    // включаем / выключаем музыку и клики
         }
 
         private void OnThemeChanged(object sender, EventArgs e)
