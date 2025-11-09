@@ -25,13 +25,11 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
-        // ✅ Сервисы приложения
+        // ✅ Сервисы
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<ThemeService>();
         builder.Services.AddSingleton<LanguageService>();
         builder.Services.AddSingleton<AppDatabase>();
-
-        // ✅ Добавляем АУДИО
         builder.Services.AddSingleton(AudioManager.Current);
         builder.Services.AddSingleton<SoundService>();
 
@@ -39,26 +37,19 @@ public static class MauiProgram
         builder.Services.AddTransient<WelcomePage>();
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<ScoresPage>(); // ✅ ВАЖНО — чтобы кнопка "Рекорды" работала
 
 #if ANDROID
-        // ✅ Убираем подчеркивание у Entry
         EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
         {
             if (handler.PlatformView != null)
-            {
-                handler.PlatformView.BackgroundTintList =
-                    ColorStateList.ValueOf(AColor.Transparent);
-            }
+                handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(AColor.Transparent);
         });
 
-        // ✅ Убираем подчеркивание у Picker
         PickerHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
         {
             if (handler.PlatformView != null)
-            {
-                handler.PlatformView.BackgroundTintList =
-                    ColorStateList.ValueOf(AColor.Transparent);
-            }
+                handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(AColor.Transparent);
         });
 #endif
 

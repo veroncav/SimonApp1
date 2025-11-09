@@ -1,15 +1,19 @@
 using SQLite;
 
-namespace SimonApp1.Models;
-
-public class ScoreRecord
+namespace SimonApp1.Models
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    public class ScoreRecord
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
 
-    public string PlayerName { get; set; }
+        public string PlayerName { get; set; } = string.Empty;
 
-    public int Score { get; set; }
+        public int Score { get; set; }
 
-    public DateTime Date { get; set; }
+        // "Win" или "Lose"
+        public string Result { get; set; } = string.Empty;
+
+        public DateTime Date { get; set; } = DateTime.Now;
+    }
 }

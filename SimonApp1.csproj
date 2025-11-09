@@ -40,6 +40,12 @@
 	  </MauiAsset>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Views\ScoresPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 	<!-- ✅ Генерация классов для локализации -->
 
 </Project>

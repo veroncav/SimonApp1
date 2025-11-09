@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SimonApp1.Views.ScoresPage"
+             Title="История игр"
+             BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#121212}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="14" Padding="20">
+
+            <Label Text="История игр"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+
+            <CollectionView x:Name="ScoresList"
+                            ItemsSource="{Binding Scores}"
+                            SelectionMode="None">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="16"
+                               Padding="16"
+                               BackgroundColor="{AppThemeBinding Light=White, Dark=#2B2B2B}"
+                               HasShadow="True">
+
+                            <VerticalStackLayout Spacing="6">
+
+                                <Label Text="{Binding PlayerName}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+
+                                <Label Text="{Binding Score, StringFormat='Очки: {0}'}"
+                                       FontSize="16"
+                                       TextColor="{AppThemeBinding Light=#555555, Dark=#CCCCCC}" />
+
+                                <Label Text="{Binding Result, StringFormat='Результат: {0}'}"
+                                       FontSize="16"
+                                       TextColor="{AppThemeBinding Light=#555555, Dark=#CCCCCC}" />
+
+                                <Label Text="{Binding Date, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}"
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#777777, Dark=#BBBBBB}" />
+
+                            </VerticalStackLayout>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

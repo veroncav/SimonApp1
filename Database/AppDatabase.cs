@@ -1,26 +1,33 @@
 using SQLite;
 using SimonApp1.Models;
 
-namespace SimonApp1.Database;
-
-public class AppDatabase
+namespace SimonApp1.Database
 {
-    private readonly SQLiteAsyncConnection _database;
-
-    public AppDatabase()
+    public class AppDatabase
     {
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "simonapp.db3");
-        _database = new SQLiteAsyncConnection(dbPath);
-        _database.CreateTableAsync<ScoreRecord>().Wait();
-    }
+        private readonly SQLiteAsyncConnection _database;
 
-    public Task<int> SaveScoreAsync(ScoreRecord record)
-    {
-        return _database.InsertAsync(record);
-    }
+        public AppDatabase()
+        {
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "simonapp.db3");
+            _database = new SQLiteAsyncConnection(dbPath);
 
-    public Task<List<ScoreRecord>> GetScoresAsync()
-    {
-        return _database.Table<ScoreRecord>().OrderByDescending(x => x.Score).ToListAsync();
+            // Создаём таблицу, если её нет
+            _database.CreateTableAsync<ScoreRecord>().Wait();
+        }
+
+        // Сохранить запись (результат игры)
+        public Task<int> SaveScoreAsync(ScoreRecord record)
+        {
+            return _database.InsertAsync(record);
+        }
+
+        // Получить все записи (для страницы истории результатов)
+        public Task<List<ScoreRecord>> GetScoresAsync()
+        {
+            return _database.Table<ScoreRecord>()
+                .OrderByDescending(x => x.Date) // сортировка по дате (последние сверху)
+                .ToListAsync();
+        }
     }
 }
