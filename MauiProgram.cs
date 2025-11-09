@@ -38,6 +38,7 @@ public static class MauiProgram
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<SettingsPage>();
         builder.Services.AddTransient<ScoresPage>(); // ✅ ВАЖНО — чтобы кнопка "Рекорды" работала
+        builder.Services.AddTransient<RulesPage>();
 
 #if ANDROID
         EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>

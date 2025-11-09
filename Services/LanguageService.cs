@@ -12,26 +12,37 @@ namespace SimonApp1.Services
 
         private readonly Dictionary<string, Dictionary<string, string>> _t = new()
         {
+            // 🇷🇺 Russian
             { "ru", new()
                 {
                     { "welcome", "Добро пожаловать" },
-                    { "game", "Игра" },
-                    { "player", "Игрок" },
-                    { "score", "Очки" },
                     { "start", "Начать игру" },
+                    { "settings", "Настройки" },
+                    { "records", "Рекорды" },
+                    { "score", "Очки" },
+                    { "player", "Игрок" },
                     { "enter_name", "Введите имя" },
-                    { "ok", "Ок" }
+                    { "ok", "Ок" },
+                    { "rules", "Правила игры" },
+                    { "rules_text", "Повторяй последовательность цветов. Каждый раунд она становится длиннее. Ошибся — игра окончена." },
+                    { "back", "Назад" }
                 }
             },
+
+            // 🇬🇧 English
             { "en", new()
                 {
                     { "welcome", "Welcome" },
-                    { "game", "Game" },
-                    { "player", "Player" },
-                    { "score", "Score" },
                     { "start", "Start Game" },
+                    { "settings", "Settings" },
+                    { "records", "High Scores" },
+                    { "score", "Score" },
+                    { "player", "Player" },
                     { "enter_name", "Enter name" },
-                    { "ok", "OK" }
+                    { "ok", "OK" },
+                    { "rules", "Game Rules" },
+                    { "rules_text", "Repeat the color sequence. Each round the sequence grows. If you make a mistake — the game ends." },
+                    { "back", "Back" }
                 }
             }
         };
@@ -44,7 +55,7 @@ namespace SimonApp1.Services
                 : key;
         }
 
-        // ✅ ВОТ ЭТО ДОБАВЛЕНО
+        // ✅ Позволяет писать Binding [score]
         public string this[string key] => T(key);
     }
 }

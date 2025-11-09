@@ -41,6 +41,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\RulesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ScoresPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
