@@ -143,12 +143,11 @@ namespace SimonApp1.Views
             {
                 PlayerName = playerName,
                 Score = score,
-                Result = isWin ? "Win" : "Lose",
+                Result = isWin ? lang.T("win") : lang.T("lose"),
                 Date = DateTime.Now
             });
         }
 
-        // ✅ Окно проигрыша с кнопкой "Посмотреть результаты"
         private async Task GameOver()
         {
             DisableColorButtons();
@@ -156,13 +155,13 @@ namespace SimonApp1.Views
             StartButton.IsEnabled = true;
 
             string choice = await DisplayActionSheet(
-                $"❌ Проигрыш!\nОчки: {score}",
-                "Закрыть",
+                $"{lang.T("lose")}! {lang.T("points")}: {score}",
+                lang.T("close"),
                 null,
-                "Посмотреть результаты"
+                lang.T("records")
             );
 
-            if (choice == "Посмотреть результаты")
+            if (choice == lang.T("records"))
             {
                 await Navigation.PushAsync(
                     App.Current.Handler.MauiContext.Services.GetService<ScoresPage>()
@@ -170,7 +169,6 @@ namespace SimonApp1.Views
             }
         }
 
-        // ✅ Окно победы с кнопкой "Посмотреть результаты"
         private async Task WinGameAsync()
         {
             await SaveResultAsync(true);
@@ -180,13 +178,13 @@ namespace SimonApp1.Views
             StartButton.IsEnabled = true;
 
             string choice = await DisplayActionSheet(
-                $"🏆 Победа!\nОчки: {score}",
-                "Закрыть",
+                $"{lang.T("win")}! {lang.T("points")}: {score}",
+                lang.T("close"),
                 null,
-                "Посмотреть результаты"
+                lang.T("records")
             );
 
-            if (choice == "Посмотреть результаты")
+            if (choice == lang.T("records"))
             {
                 await Navigation.PushAsync(
                     App.Current.Handler.MauiContext.Services.GetService<ScoresPage>()

@@ -1,31 +1,43 @@
 using Microsoft.Maui.Controls;
 using SimonApp1.Database;
+using SimonApp1.Services;
 using SimonApp1.Models;
-using System.Collections.ObjectModel;
 
 namespace SimonApp1.Views
 {
     public partial class ScoresPage : ContentPage
     {
-        public ObservableCollection<ScoreRecord> Scores { get; set; } = new();
-
         private readonly AppDatabase _db;
+        private readonly LanguageService _lang;
 
-        public ScoresPage(AppDatabase db)
+        public ScoresPage(AppDatabase db, LanguageService lang)
         {
             InitializeComponent();
             _db = db;
-            BindingContext = this;
+            _lang = lang;
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            Scores.Clear();
+
+            Title = _lang.T("history");
 
             var records = await _db.GetScoresAsync();
+            var list = new List<ScoreView>();
+
             foreach (var r in records)
-                Scores.Add(r);
+            {
+                list.Add(new ScoreView
+                {
+                    PlayerName = r.PlayerName,
+                    Points = $"{_lang.T("points")}: {r.Score}",
+                    Result = $"{_lang.T("result")}: {_lang.T(r.Result.ToLower())}", // win/lose перевод
+                    Date = $"{_lang.T("date")}: {r.Date:dd.MM.yyyy HH:mm}"
+                });
+            }
+
+            ScoresList.ItemsSource = list;
         }
     }
 }

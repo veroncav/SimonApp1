@@ -1,12 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:services="clr-namespace:SimonApp1.Services"
              x:Class="SimonApp1.Views.MainPage"
              BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#121212}">
 
+    <!-- ✅ Ресурс языка -->
+    <ContentPage.Resources>
+        <services:LanguageService x:Key="Lang" />
+    </ContentPage.Resources>
+
     <Grid>
 
-        <!-- 🔊 Кнопка звука -->
+        <!-- Кнопка звука -->
         <Button x:Name="SoundToggleButton"
                 Text="🔊"
                 Clicked="OnSoundToggleClicked"
@@ -18,7 +24,6 @@
                 VerticalOptions="Start"
                 ZIndex="100"/>
 
-        <!-- Игровой интерфейс -->
         <VerticalStackLayout Padding="30" Spacing="18" VerticalOptions="Center" HorizontalOptions="Center">
 
             <Label Text="Simon Says"
@@ -27,7 +32,8 @@
                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                    HorizontalOptions="Center" />
 
-            <Label Text="Очки:"
+            <!-- ✅ Перевод слова "Очки" -->
+            <Label Text="{Binding Source={StaticResource Lang}, Path=[score]}"
                    TextColor="{AppThemeBinding Light=#444444, Dark=#CCCCCC}"
                    HorizontalOptions="Center"/>
 
@@ -38,6 +44,7 @@
                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                    HorizontalOptions="Center" />
 
+            <!-- Игровые кнопки -->
             <Grid HorizontalOptions="Center"
                   ColumnDefinitions="150,150"
                   RowDefinitions="150,150"
@@ -68,8 +75,9 @@
                         Clicked="OnColorClicked"/>
             </Grid>
 
+            <!-- ✅ Перевод "Начать игру" -->
             <Button x:Name="StartButton"
-                    Text="Начать игру"
+                    Text="{Binding Source={StaticResource Lang}, Path=[start]}"
                     HeightRequest="55"
                     CornerRadius="16"
                     BackgroundColor="#7B4DFF"
@@ -78,6 +86,7 @@
                     Clicked="OnStartClicked"/>
         </VerticalStackLayout>
 
+        <!-- Окно ввода имени -->
         <Grid x:Name="NamePopup"
               BackgroundColor="#80000088"
               IsVisible="True"
@@ -95,20 +104,20 @@
 
                 <VerticalStackLayout Spacing="14">
 
-                    <Label Text="Введите имя"
+                    <Label Text="{Binding Source={StaticResource Lang}, Path=[enter_name]}"
                            FontSize="22"
                            FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
                            HorizontalOptions="Center" />
 
                     <Entry x:Name="PlayerNameEntry"
-                           Placeholder="Имя игрока"
+                           Placeholder="{Binding Source={StaticResource Lang}, Path=[player]}"
                            FontSize="18"
                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
                            PlaceholderColor="{AppThemeBinding Light=#777777, Dark=#BBBBBB}"
                            BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#3A3A3A}" />
 
-                    <Button Text="OK"
+                    <Button Text="{Binding Source={StaticResource Lang}, Path=[ok]}"
                             CornerRadius="10"
                             BackgroundColor="#7B4DFF"
                             TextColor="White"
@@ -117,8 +126,6 @@
 
                 </VerticalStackLayout>
             </Frame>
-
         </Grid>
-
     </Grid>
 </ContentPage>

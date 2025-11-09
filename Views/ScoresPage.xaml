@@ -2,21 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimonApp1.Views.ScoresPage"
-             Title="История игр"
              BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#121212}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="14" Padding="20">
 
-            <Label Text="История игр"
+            <Label Text="{Binding Title, Source={x:Reference Name=Page}}"
                    FontSize="32"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    TextColor="{AppThemeBinding Light=Black, Dark=White}" />
 
-            <CollectionView x:Name="ScoresList"
-                            ItemsSource="{Binding Scores}"
-                            SelectionMode="None">
+            <CollectionView x:Name="ScoresList" SelectionMode="None">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -32,15 +29,15 @@
                                        FontAttributes="Bold"
                                        TextColor="{AppThemeBinding Light=Black, Dark=White}" />
 
-                                <Label Text="{Binding Score, StringFormat='Очки: {0}'}"
+                                <Label Text="{Binding Points}"
                                        FontSize="16"
                                        TextColor="{AppThemeBinding Light=#555555, Dark=#CCCCCC}" />
 
-                                <Label Text="{Binding Result, StringFormat='Результат: {0}'}"
+                                <Label Text="{Binding Result}"
                                        FontSize="16"
                                        TextColor="{AppThemeBinding Light=#555555, Dark=#CCCCCC}" />
 
-                                <Label Text="{Binding Date, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}"
+                                <Label Text="{Binding Date}"
                                        FontSize="14"
                                        TextColor="{AppThemeBinding Light=#777777, Dark=#BBBBBB}" />
 
@@ -51,7 +48,7 @@
                 </CollectionView.ItemTemplate>
 
             </CollectionView>
+
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
