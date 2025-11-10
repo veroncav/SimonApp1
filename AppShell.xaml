@@ -1,26 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
+    x:Class="SimonApp1.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:SimonApp1.Views"
-    x:Class="SimonApp1.AppShell">
+    xmlns:views="clr-namespace:SimonApp1.Views">
 
-    <!-- Стартовая страница -->
     <ShellContent
-        Title="Welcome"
-        ContentTemplate="{DataTemplate views:WelcomePage}"
-        Route="WelcomePage" />
+        Route="WelcomePage"
+        ContentTemplate="{DataTemplate views:WelcomePage}" />
 
-    <!-- Игра -->
     <ShellContent
-        Title="Game"
-        ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage"
-        IsVisible="False" />
+        ContentTemplate="{DataTemplate views:MainPage}" />
 
-    <!-- Настройки -->
     <ShellContent
-        Title="Settings"
-        ContentTemplate="{DataTemplate views:SettingsPage}"
         Route="SettingsPage"
-        IsVisible="False" />
+        ContentTemplate="{DataTemplate views:SettingsPage}" />
+
+    <ShellContent
+        Route="ScoresPage"
+        ContentTemplate="{DataTemplate views:ScoresPage}" />
+
+    <ShellContent
+        Route="RulesPage"
+        ContentTemplate="{DataTemplate views:RulesPage}" />
+
 </Shell>

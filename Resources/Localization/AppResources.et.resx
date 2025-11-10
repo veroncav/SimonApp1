@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="Welcome">
+		<value>Tere tulemast</value>
+	</data>
+	<data name="Start">
+		<value>Alusta mängu</value>
+	</data>
+	<data name="Settings">
+		<value>Seaded</value>
+	</data>
+	<data name="Records">
+		<value>Rekordid</value>
+	</data>
+	<data name="History">
+		<value>Mängu ajalugu</value>
+	</data>
+
+	<data name="Score">
+		<value>Punktid</value>
+	</data>
+	<data name="Points">
+		<value>Punktid</value>
+	</data>
+	<data name="Player">
+		<value>Mängija</value>
+	</data>
+	<data name="Result">
+		<value>Tulemus</value>
+	</data>
+	<data name="Date">
+		<value>Kuupäev</value>
+	</data>
+
+	<data name="EnterName">
+		<value>Sisesta nimi</value>
+	</data>
+	<data name="Ok">
+		<value>OK</value>
+	</data>
+
+	<data name="Win">
+		<value>Võit</value>
+	</data>
+	<data name="Lose">
+		<value>Kaotus</value>
+	</data>
+	<data name="Close">
+		<value>Sulge</value>
+	</data>
+
+	<data name="Rules">
+		<value>Mängureeglid</value>
+	</data>
+	<data name="RulesText">
+		<value>Korda värvide järjestust. Iga vooruga järjestus pikeneb. Kui eksid — mäng on läbi.</value>
+	</data>
+	<data name="Back">
+		<value>Tagasi</value>
+	</data>
+	<data name="Theme" xml:space="preserve"><value>Teema</value></data>
+	<data name="Sound" xml:space="preserve"><value>Heli</value></data>
+	<data name="Language" xml:space="preserve"><value>Keel</value></data>
+	<data name="MaxRounds" xml:space="preserve"><value>Maksimum voorud</value></data>
+
+</root>

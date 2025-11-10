@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using SimonApp1.Services;
+using SimonApp1.Resources.Localization;
+using System.Globalization;
 
 namespace SimonApp1.Views
 {
@@ -7,45 +9,62 @@ namespace SimonApp1.Views
     {
         private readonly SettingsService _settings;
         private readonly ThemeService _themeService;
-        private readonly LanguageService _lang;
-        private readonly SoundService _sound; // ✅ добавили
+        private readonly SoundService _sound;
 
-        public SettingsPage(SettingsService settings, ThemeService themeService, LanguageService lang, SoundService sound)
+        private bool _isUpdatingLanguage;
+
+        // ✅ Shell будет использовать этот конструктор (без параметров)
+        public SettingsPage() : this(
+            ServiceHelper.Get<SettingsService>(),
+            ServiceHelper.Get<ThemeService>(),
+            ServiceHelper.Get<SoundService>())
+        { }
+
+        public SettingsPage(SettingsService settings, ThemeService themeService, SoundService sound)
         {
             InitializeComponent();
             _settings = settings;
             _themeService = themeService;
-            _lang = lang;
-            _sound = sound; // ✅ получили звук
+            _sound = sound;
 
-            // Initialize UI
-            SoundSwitch.IsToggled = _sound.IsSoundEnabled; // ✅ теперь привязано к SoundService
-            ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
-
-            LanguagePicker.ItemsSource = new List<string> { "ru", "en", "et" };
-            LanguagePicker.SelectedItem = _lang.CurrentLanguage;
-
-            MaxRoundsSlider.Value = _settings.MaxRounds;
-            MaxRoundsValue.Text = _settings.MaxRounds.ToString();
-
+            LoadSettings();
             ApplyLanguage();
         }
 
         private void ApplyLanguage()
         {
-            LabelSettings.Text = _lang.T("settings");
-            LabelTheme.Text = _lang.T("theme");
-            LabelSound.Text = _lang.T("sound");
-            LabelLanguage.Text = _lang.T("language");
-            LabelMaxRounds.Text = _lang.T("max_rounds");
-            ButtonBack.Text = _lang.T("back");
+            LabelSettings.Text = AppResources.Settings;
+            LabelTheme.Text = AppResources.Theme;
+            LabelSound.Text = AppResources.Sound;
+            LabelLanguage.Text = AppResources.Language;
+            LabelMaxRounds.Text = AppResources.MaxRounds;
+            ButtonBack.Text = AppResources.Back;
         }
 
-        // ✅ Исправлено — теперь звук реально выключается и включается
+        private void LoadSettings()
+        {
+            ThemePicker.ItemsSource = new List<string> { "Light", "Dark" };
+            ThemePicker.SelectedItem = _themeService.CurrentTheme == AppTheme.Dark ? "Dark" : "Light";
+
+            SoundSwitch.IsToggled = _sound.IsSoundEnabled;
+
+            MaxRoundsSlider.Value = _settings.MaxRounds;
+            MaxRoundsValue.Text = _settings.MaxRounds.ToString();
+
+            var lang = _settings.Language;
+            LanguagePicker.SelectedIndex = lang switch
+            {
+                "ru" => 0,
+                "en" => 1,
+                "et" => 2,
+                _ => 0
+            };
+        }
+
         private void OnSoundToggled(object sender, ToggledEventArgs e)
         {
-            _settings.SoundOn = e.Value;        // сохраняем в настройки
-            _sound.IsSoundEnabled = e.Value;    // включаем / выключаем музыку и клики
+            _sound.IsSoundEnabled = e.Value;
+            _settings.SoundOn = e.Value;
         }
 
         private void OnThemeChanged(object sender, EventArgs e)
@@ -54,11 +73,28 @@ namespace SimonApp1.Views
             _themeService.SetTheme(theme == "Dark" ? AppTheme.Dark : AppTheme.Light);
         }
 
-        private void OnLanguageChanged(object sender, EventArgs e)
+        private async void OnLanguageChanged(object sender, EventArgs e)
         {
-            if (LanguagePicker.SelectedItem is not string lang) return;
-            _lang.CurrentLanguage = lang;
-            ApplyLanguage();
+            if (_isUpdatingLanguage) return;
+
+            int index = LanguagePicker.SelectedIndex;
+            if (index < 0) return;
+
+            string lang = index switch
+            {
+                0 => "ru",
+                1 => "en",
+                2 => "et",
+                _ => "ru"
+            };
+
+            _isUpdatingLanguage = true;
+
+            _settings.ApplyLanguage(lang);
+            ApplyLanguage(); // обновляем текст на странице
+
+            await Task.Delay(60);
+            _isUpdatingLanguage = false;
         }
 
         private void OnMaxRoundsChanged(object sender, ValueChangedEventArgs e)
@@ -70,7 +106,7 @@ namespace SimonApp1.Views
 
         private async void OnBackClicked(object sender, EventArgs e)
         {
-            await Navigation.PopAsync();
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

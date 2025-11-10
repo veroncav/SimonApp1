@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<data name="Welcome">
+		<value>Welcome</value>
+	</data>
+	<data name="Start">
+		<value>Start Game</value>
+	</data>
+	<data name="Settings">
+		<value>Settings</value>
+	</data>
+	<data name="Records">
+		<value>High Scores</value>
+	</data>
+	<data name="History">
+		<value>Game History</value>
+	</data>
+
+	<data name="Score">
+		<value>Score</value>
+	</data>
+	<data name="Points">
+		<value>Points</value>
+	</data>
+	<data name="Player">
+		<value>Player</value>
+	</data>
+	<data name="Result">
+		<value>Result</value>
+	</data>
+	<data name="Date">
+		<value>Date</value>
+	</data>
+
+	<data name="EnterName">
+		<value>Enter name</value>
+	</data>
+	<data name="Ok">
+		<value>OK</value>
+	</data>
+
+	<data name="Win">
+		<value>Win</value>
+	</data>
+	<data name="Lose">
+		<value>Lose</value>
+	</data>
+	<data name="Close">
+		<value>Close</value>
+	</data>
+
+	<data name="Rules">
+		<value>Game Rules</value>
+	</data>
+	<data name="RulesText">
+		<value>Repeat the sequence of colors. Each round it gets longer. If you make a mistake — the game ends.</value>
+	</data>
+	<data name="Back">
+		<value>Back</value>
+	</data>
+	<data name="Theme" xml:space="preserve"><value>Theme</value></data>
+	<data name="Sound" xml:space="preserve"><value>Sound</value></data>
+	<data name="Language" xml:space="preserve"><value>Language</value></data>
+	<data name="MaxRounds" xml:space="preserve"><value>Max Rounds</value></data>
+
+</root>

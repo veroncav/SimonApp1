@@ -1,3 +1,6 @@
+﻿using Microsoft.Maui.Storage;
+using System.Globalization;
+
 namespace SimonApp1.Services
 {
     public class SettingsService
@@ -5,6 +8,7 @@ namespace SimonApp1.Services
         const string NAME_KEY = "player_name";
         const string MAX_KEY = "max_rounds";
         const string SOUND_KEY = "sound_on";
+        const string LANG_KEY = "lang";
 
         public string PlayerName
         {
@@ -22,6 +26,27 @@ namespace SimonApp1.Services
         {
             get => Preferences.Get(SOUND_KEY, true);
             set => Preferences.Set(SOUND_KEY, value);
+        }
+
+        public string Language
+        {
+            get => Preferences.Get(LANG_KEY, "ru");
+            set => Preferences.Set(LANG_KEY, value);
+        }
+
+        public void ApplyLanguage(string lang)
+        {
+            Preferences.Set(LANG_KEY, lang);
+
+            var culture = new CultureInfo(lang);
+
+            SimonApp1.Resources.Localization.AppResources.Culture = culture;
+
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
     }
 }

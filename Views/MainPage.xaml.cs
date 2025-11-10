@@ -2,6 +2,7 @@
 using SimonApp1.Database;
 using SimonApp1.Services;
 using SimonApp1.Models;
+using SimonApp1.Resources.Localization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +12,6 @@ namespace SimonApp1.Views
     public partial class MainPage : ContentPage
     {
         private readonly SettingsService settings;
-        private readonly LanguageService lang;
         private readonly AppDatabase db;
         private readonly SoundService _sound;
 
@@ -23,11 +23,17 @@ namespace SimonApp1.Views
         private bool isUserTurn = false;
         private int score = 0;
 
-        public MainPage(SettingsService settings, LanguageService lang, AppDatabase db, SoundService sound)
+        // ✅ Shell будет вызывать этот конструктор
+        public MainPage() : this(
+            ServiceHelper.Get<SettingsService>(),
+            ServiceHelper.Get<AppDatabase>(),
+            ServiceHelper.Get<SoundService>())
+        { }
+
+        public MainPage(SettingsService settings, AppDatabase db, SoundService sound)
         {
             InitializeComponent();
             this.settings = settings;
-            this.lang = lang;
             this.db = db;
             _sound = sound;
 
@@ -136,14 +142,14 @@ namespace SimonApp1.Views
         private async Task SaveResultAsync(bool isWin)
         {
             var playerName = string.IsNullOrWhiteSpace(settings.PlayerName)
-                ? "Player"
+                ? AppResources.Player
                 : settings.PlayerName;
 
             await db.SaveScoreAsync(new ScoreRecord
             {
                 PlayerName = playerName,
                 Score = score,
-                Result = isWin ? lang.T("win") : lang.T("lose"),
+                Result = isWin ? AppResources.Win : AppResources.Lose,
                 Date = DateTime.Now
             });
         }
@@ -155,18 +161,14 @@ namespace SimonApp1.Views
             StartButton.IsEnabled = true;
 
             string choice = await DisplayActionSheet(
-                $"{lang.T("lose")}! {lang.T("points")}: {score}",
-                lang.T("close"),
+                $"{AppResources.Lose}! {AppResources.Points}: {score}",
+                AppResources.Close,
                 null,
-                lang.T("records")
+                AppResources.Records
             );
 
-            if (choice == lang.T("records"))
-            {
-                await Navigation.PushAsync(
-                    App.Current.Handler.MauiContext.Services.GetService<ScoresPage>()
-                );
-            }
+            if (choice == AppResources.Records)
+                await Shell.Current.GoToAsync(nameof(ScoresPage));
         }
 
         private async Task WinGameAsync()
@@ -178,18 +180,14 @@ namespace SimonApp1.Views
             StartButton.IsEnabled = true;
 
             string choice = await DisplayActionSheet(
-                $"{lang.T("win")}! {lang.T("points")}: {score}",
-                lang.T("close"),
+                $"{AppResources.Win}! {AppResources.Points}: {score}",
+                AppResources.Close,
                 null,
-                lang.T("records")
+                AppResources.Records
             );
 
-            if (choice == lang.T("records"))
-            {
-                await Navigation.PushAsync(
-                    App.Current.Handler.MauiContext.Services.GetService<ScoresPage>()
-                );
-            }
+            if (choice == AppResources.Records)
+                await Shell.Current.GoToAsync(nameof(ScoresPage));
         }
     }
 }

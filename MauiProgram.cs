@@ -1,15 +1,9 @@
 ﻿using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
-using SimonApp1.Database;
 using SimonApp1.Services;
 using SimonApp1.Views;
+using SimonApp1.Database;
 using Plugin.Maui.Audio;
-
-#if ANDROID
-using Microsoft.Maui.Handlers;
-using Android.Content.Res;
-using AColor = Android.Graphics.Color;
-#endif
 
 namespace SimonApp1;
 
@@ -19,41 +13,30 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
+            .UseMauiApp<App>();
 
-        // ✅ Сервисы
+        // Services
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<ThemeService>();
-        builder.Services.AddSingleton<LanguageService>();
-        builder.Services.AddSingleton<AppDatabase>();
-        builder.Services.AddSingleton(AudioManager.Current);
+        builder.Services.AddSingleton<AudioManager>();
         builder.Services.AddSingleton<SoundService>();
+        builder.Services.AddSingleton<AppDatabase>();
+        builder.Services.AddSingleton<Plugin.Maui.Audio.IAudioManager>(Plugin.Maui.Audio.AudioManager.Current);
 
-        // ✅ Страницы
+        // ✅ Pages must be Transient (NOT Singleton)
         builder.Services.AddTransient<WelcomePage>();
-        builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<SettingsPage>();
-        builder.Services.AddTransient<ScoresPage>(); // ✅ ВАЖНО — чтобы кнопка "Рекорды" работала
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<ScoresPage>();
         builder.Services.AddTransient<RulesPage>();
 
-#if ANDROID
-        EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
-        {
-            if (handler.PlatformView != null)
-                handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(AColor.Transparent);
-        });
+        var app = builder.Build();
+        ServiceHelper.Services = app.Services;
 
-        PickerHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, view) =>
-        {
-            if (handler.PlatformView != null)
-                handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(AColor.Transparent);
-        });
-#endif
+        // ✅ Apply saved language at launch
+        var settings = app.Services.GetService<SettingsService>();
+        settings?.ApplyLanguage(settings.Language);
 
-        return builder.Build();
+        return app;
     }
 }

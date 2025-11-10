@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter</value>
+	</resheader>
+
+	<data name="Welcome" xml:space="preserve"><value>Добро пожаловать</value></data>
+	<data name="Start" xml:space="preserve"><value>Начать игру</value></data>
+	<data name="Settings" xml:space="preserve"><value>Настройки</value></data>
+	<data name="Records" xml:space="preserve"><value>Рекорды</value></data>
+	<data name="History" xml:space="preserve"><value>История игр</value></data>
+
+	<data name="Score" xml:space="preserve"><value>Очки</value></data>
+	<data name="Points" xml:space="preserve"><value>Очки</value></data>
+	<data name="Player" xml:space="preserve"><value>Игрок</value></data>
+	<data name="Result" xml:space="preserve"><value>Результат</value></data>
+	<data name="Date" xml:space="preserve"><value>Дата</value></data>
+
+	<data name="EnterName" xml:space="preserve"><value>Введите имя</value></data>
+	<data name="Ok" xml:space="preserve"><value>Ок</value></data>
+
+	<data name="Win" xml:space="preserve"><value>Победа</value></data>
+	<data name="Lose" xml:space="preserve"><value>Поражение</value></data>
+	<data name="Close" xml:space="preserve"><value>Закрыть</value></data>
+
+	<data name="Rules" xml:space="preserve"><value>Правила игры</value></data>
+	<data name="RulesText" xml:space="preserve"><value>Повторяй последовательность цветов. С каждым раундом она становится длиннее. Ошибка — игра окончена.</value></data>
+	<data name="Back" xml:space="preserve"><value>Назад</value></data>
+	<data name="Theme" xml:space="preserve"><value>Тема</value></data>
+	<data name="Sound" xml:space="preserve"><value>Звук</value></data>
+	<data name="Language" xml:space="preserve"><value>Язык</value></data>
+	<data name="MaxRounds" xml:space="preserve"><value>Максимум раундов</value></data>
+
+</root>

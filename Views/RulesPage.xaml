@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:services="clr-namespace:SimonApp1.Services"
+             xmlns:res="clr-namespace:SimonApp1.Resources.Localization"
              x:Class="SimonApp1.Views.RulesPage"
              BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#121212}">
 
-    <ContentPage.Resources>
-        <services:LanguageService x:Key="Lang"/>
-    </ContentPage.Resources>
-
     <VerticalStackLayout Padding="30" Spacing="20">
 
-        <Label Text="{Binding Source={StaticResource Lang}, Path=[rules]}"
+        <Label Text="{x:Static res:AppResources.Rules}"
                FontSize="32"
                FontAttributes="Bold"
                HorizontalOptions="Center"
                TextColor="{AppThemeBinding Light=Black, Dark=White}" />
 
-        <Label Text="{Binding Source={StaticResource Lang}, Path=[rules_text]}"
+        <Label Text="{x:Static res:AppResources.RulesText}"
                FontSize="18"
                TextColor="{AppThemeBinding Light=#444444, Dark=#DDDDDD}" />
 
-        <Button Text="{Binding Source={StaticResource Lang}, Path=[back]}"
+        <Button Text="{x:Static res:AppResources.Back}"
                 BackgroundColor="#7B4DFF"
                 TextColor="White"
                 CornerRadius="12"

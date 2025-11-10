@@ -1,4 +1,6 @@
-﻿namespace SimonApp1
+﻿using SimonApp1.Views;
+
+namespace SimonApp1
 {
     public partial class AppShell : Shell
     {
@@ -6,9 +8,10 @@
         {
             InitializeComponent();
 
-            Routing.RegisterRoute(nameof(Views.WelcomePage), typeof(Views.WelcomePage));
-            Routing.RegisterRoute(nameof(Views.MainPage), typeof(Views.MainPage));
-            Routing.RegisterRoute(nameof(Views.SettingsPage), typeof(Views.SettingsPage));
+            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+            Routing.RegisterRoute(nameof(ScoresPage), typeof(ScoresPage));
+            Routing.RegisterRoute(nameof(RulesPage), typeof(RulesPage));
         }
     }
 }

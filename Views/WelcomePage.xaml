@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:services="clr-namespace:SimonApp1.Services"
              x:Class="SimonApp1.Views.WelcomePage"
              BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#1E1E1E}">
 
-    <ContentPage.Resources>
-        <services:LanguageService x:Key="Lang"/>
-    </ContentPage.Resources>
-
     <VerticalStackLayout Padding="40" Spacing="32" VerticalOptions="Center">
 
-        <Label Text="SIMON SAYS"
+        <Label x:Name="TitleLabel"
+               Text="SIMON SAYS"
                FontSize="48"
                FontAttributes="Bold"
                HorizontalOptions="Center"
                TextColor="{AppThemeBinding Light=#0077FF, Dark=#66B3FF}" />
 
         <Button x:Name="StartGameButton"
-                Text="{Binding Source={StaticResource Lang}, Path=[start]}"
                 HeightRequest="55"
                 CornerRadius="18"
                 BackgroundColor="#7B4DFF"
@@ -27,7 +22,6 @@
                 Clicked="OnStartGameClicked"/>
 
         <Button x:Name="ScoresButton"
-                Text="{Binding Source={StaticResource Lang}, Path=[records]}"
                 HeightRequest="55"
                 CornerRadius="18"
                 BackgroundColor="#3D85C6"
@@ -36,7 +30,6 @@
                 Clicked="OnScoresClicked"/>
 
         <Button x:Name="SettingsButton"
-                Text="{Binding Source={StaticResource Lang}, Path=[settings]}"
                 HeightRequest="55"
                 CornerRadius="18"
                 BackgroundColor="#5F5F5F"
@@ -44,9 +37,7 @@
                 FontSize="20"
                 Clicked="OnSettingsClicked"/>
 
-        <!-- ✅ Новая кнопка правил -->
         <Button x:Name="RulesButton"
-                Text="{Binding Source={StaticResource Lang}, Path=[rules]}"
                 HeightRequest="55"
                 CornerRadius="18"
                 BackgroundColor="#FF9F00"

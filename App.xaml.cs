@@ -5,14 +5,19 @@ namespace SimonApp1
     public partial class App : Application
     {
         private readonly ThemeService _themeService;
-        private readonly SoundService _soundService; // ✅ добавили звук
+        private readonly SoundService _soundService;
+        private readonly SettingsService _settings; // ✅ добавили
 
-        public App(ThemeService themeService, SoundService soundService) // ✅ получаем из DI
+        public App(ThemeService themeService, SoundService soundService, SettingsService settings)
         {
             InitializeComponent();
 
             _themeService = themeService;
             _soundService = soundService;
+            _settings = settings;
+
+            // ✅ применяем сохранённый язык ПРИ СТАРТЕ
+            _settings.ApplyLanguage(_settings.Language);
 
             // ✅ применяем тему
             _themeService.SetTheme(_themeService.CurrentTheme);
@@ -26,19 +31,19 @@ namespace SimonApp1
         protected override async void OnStart()
         {
             base.OnStart();
-            await _soundService.StartBackgroundAsync(); // ✅ запускаем фоновую музыку
+            await _soundService.StartBackgroundAsync();
         }
 
         protected override void OnSleep()
         {
             base.OnSleep();
-            _soundService.StopBackground(); // ✅ останавливаем при сворачивании
+            _soundService.StopBackground();
         }
 
         protected override async void OnResume()
         {
             base.OnResume();
-            await _soundService.StartBackgroundAsync(); // ✅ продолжаем при возврате
+            await _soundService.StartBackgroundAsync();
         }
     }
 }
