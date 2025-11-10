@@ -70,8 +70,13 @@
 ## Что можно улучшить
 - Только улучшить визуальный стиль интерфейса
   (оформление кнопок, анимации, цвета и отступы).
-<img width="604" height="1244" alt="image" src="https://github.com/user-attachments/assets/bd39741e-bf8c-4e0a-bf22-5c99fe910fa6" />
-<img width="610" height="1170" alt="image" src="https://github.com/user-attachments/assets/426c1271-eeca-46e2-a242-3078a318e04e" />
-<img width="613" height="1210" alt="image" src="https://github.com/user-attachments/assets/4476d244-0159-41dd-a40a-93a1dcc5309f" />
+  
+## Скриншоты
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bd39741e-bf8c-4e0a-bf22-5c99fe910fa6" width="250" />
+  <img src="https://github.com/user-attachments/assets/426c1271-eeca-46e2-a242-3078a318e04e" width="250" />
+  <img src="https://github.com/user-attachments/assets/4476d244-0159-41dd-a40a-93a1dcc5309f" width="250" />
+</p>
 
 
